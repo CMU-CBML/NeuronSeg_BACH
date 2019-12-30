@@ -1,4 +1,9 @@
 function [ Vx_new, Vy_new ] = BsplineCompose2D( Vx, Vy, coef_x, coef_y, nx, ny)
+
+%source code: https://github.com/stellaccl/cdmffd-image-registration
+%paper: Chan, C. L., Anitescu, C., Zhang, Y., & Rabczuk, T. (2017). Two and three dimensional image registration based on B-spline composition and level sets. 
+%Communications in Computational Physics, 21(2), 600-622.
+
 %BsplineCompose2D compose the transformation field Vx, Vy, with the update field given by
 %coef_x, coef_y.
 

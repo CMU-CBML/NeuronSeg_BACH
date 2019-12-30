@@ -1,4 +1,9 @@
 function coef = img2coef2D(nx, ny, I)
+
+%source code: https://github.com/stellaccl/cdmffd-image-registration
+%paper: Chan, C. L., Anitescu, C., Zhang, Y., & Rabczuk, T. (2017). Two and three dimensional image registration based on B-spline composition and level sets. 
+%Communications in Computational Physics, 21(2), 600-622.
+
 %img2coe2D  Compute coeffident for B-spline level set representation of image I 
 %Input:     nx = number of row of Image I 
 %           ny = number of column of Image I

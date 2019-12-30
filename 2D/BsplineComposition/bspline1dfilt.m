@@ -1,4 +1,12 @@
 function coef=bspline1dfilt(I)
+%source code: https://github.com/stellaccl/cdmffd-image-registration
+%paper: Chan, C. L., Anitescu, C., Zhang, Y., & Rabczuk, T. (2017). Two and three dimensional image registration based on B-spline composition and level sets. 
+%Communications in Computational Physics, 21(2), 600-622.
+
+%This function computes the 1D coefficients 
+
+% Input: image
+% coef: coefficients
 
 N=length(I);
 p=3;
