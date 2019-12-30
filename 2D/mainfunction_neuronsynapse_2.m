@@ -15,18 +15,17 @@ addpath(strcat(path,'/SetParameters'));
 addpath(strcat(path,'/THBSpline'));
 
 % set parameters
-parameters = setparameters_neuron01_seg();
+parameters = setparameters_neuronsynapse_2_seg();
 
 %% Read Neuron Cell Image
-
-Img = imread('01.tif');
+Img = imread('12435.jpg');
 Img = double(Img(:,:,2));
 Img = imresize(Img,[1040,1040]);
 Img = (Img-min(Img(:)))./(max(Img(:))-min(Img(:)));
 F = Img.*255;
 
 %% Perform automatic initialization
-[M] = neuron01_initialization(Img);
+[M] = neuronsynapse_2_initialization(Img);
 M = M.*255; %binary image after initialization
 
 phi_temp = Initial_Mask(M);
