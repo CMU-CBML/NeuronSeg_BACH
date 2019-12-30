@@ -1,5 +1,4 @@
-function [InitialGuess] = neuron01_initialization(Img)
-
+function [InitialGuess] = neuronsynapse_1_initialization(Img)
 %% Soma detection
 % Source code for soma detection taken from: https://github.com/kilho/NIA
 % Paper: Kim, K. M., Son, K., & Palmore, G. T. R. (2015). Neuron image analyzer: 
@@ -12,13 +11,13 @@ function [InitialGuess] = neuron01_initialization(Img)
 % function
 
 % parameter for detecting neuron cell
-kernelSize      = 80;               % size of LoG filter (unit: pixel) (depend on the scale of image)
-kernelScale     = 20;               % scale of LoG filter (unit: pixel) (depend on the scale of image)
-threRatio       = 0.5;              % threshod for detecting cell (not critical parameter)
-levelsetR       = 40;               % parameter for level set (refer to "Distance Regularized Level Set Evolution and Its Application to Image Segmentation", in IEEE TRANSACTIONS ON IMAGE PROCESSING)
+kernelSize      = 10;               % size of LoG filter (unit: pixel) (depend on the scale of image)
+kernelScale     = 5;               % scale of LoG filter (unit: pixel) (depend on the scale of image)
+threRatio       = 0.2;              % threshod for detecting cell (not critical parameter)
+levelsetR       = 1;               % parameter for level set (refer to "Distance Regularized Level Set Evolution and Its Application to Image Segmentation", in IEEE TRANSACTIONS ON IMAGE PROCESSING)        
 sigma = 3; %smooth image before intialization
-neurite_threshold = 0.07; %threshold to detect neurite
-disk_radius = 8;
+neurite_threshold = 0.01; %threshold to detect neurite
+disk_radius = 4;
 
 minSizeCell     = kernelSize/2;     % minimum size of cell
 Img = imgaussfilt(Img,sigma); %Apply Gaussian Filter on the image
@@ -28,6 +27,7 @@ inputImg = inputImg1/(max(inputImg1(:)));
 %Find the soma center using non-maximal suppression
 [x, y]  = find_nucleus_center(inputImg, inputImg1, kernelSize, kernelScale, threRatio, minSizeCell, levelsetR);
 
+[height, width] = size(inputImg);
 % make kernel and convolution
 LoG = LoG_kernel(kernelSize,kernelScale);
 LoGImg = conv2(inputImg, LoG, 'same');
@@ -41,9 +41,7 @@ threImg = (threRatioImg >= threRatio);
 BW_soma = threImg;
 
 %% Neurite detection
-
 BW = fibermetric(Img); %highlight the neurites
-BW = imfill(BW,'holes'); %fill holes
 
 %Binary image with neurites detected
 BW_neurite = zeros(size(Img));
@@ -54,18 +52,18 @@ M = zeros(size(Img));
 M(BW_neurite>0) = 1;
 M(BW_soma>0) = 1;
 
-%% Clean initial guess using connected component analysis
 
-se = strel('disk',disk_radius); %create a morphological disc component
-M = imclose(M,se); %close the image before connected component analysis
-M = bwlabel(M,4); %create a labelled image
+%% Clean initial guess using connected component analysis
+se = strel('disk',disk_radius);  %create a morphological disc component
+M = imclose(M,se);  %close the image before connected component analysis
+M = bwlabel(M,4);%create a labelled image
 M1 = zeros(size(M));
 label =zeros(size(x,1)); %find label associated with soma center
 
 %connect pixels with same label as cell center
 for i=1:size(x,1)
-    label(i) = M(y(i,1),x(i,1));
-    M1(M==label(i)) = 1;
+label(i) = M(y(i,1),x(i,1));
+M1(M==label(i)) = 1;
 end
 
 M = M1;
