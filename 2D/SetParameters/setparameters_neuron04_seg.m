@@ -1,4 +1,4 @@
-function parameters = setparameters_neuron01_seg()
+function parameters = setparameters_neuron04_seg()
 
 % rho for THB-spline refinement 
 rho(1,1) = 0.01;

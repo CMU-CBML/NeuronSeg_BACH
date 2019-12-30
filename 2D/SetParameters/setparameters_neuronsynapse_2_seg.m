@@ -1,4 +1,4 @@
-function parameters = setparameters_neuron01_seg()
+function parameters = setparameters_neuronsynapse_2_seg()
 
 % rho for THB-spline refinement 
 rho(1,1) = 0.01;
@@ -20,9 +20,9 @@ lambda3 = 0.01;
 maxiteration = 50;
 
 %time step for each level
-timestep(1,1) = 0.0005;
-timestep(2,1) = 0.0003;
-timestep(3,1) = 0.0001;
+timestep(1,1) = 0.0001;
+timestep(2,1) = 0.00005;
+timestep(3,1) = 0.00003;
 
 %number of control grid elements for first level
 nelemx = 40;
