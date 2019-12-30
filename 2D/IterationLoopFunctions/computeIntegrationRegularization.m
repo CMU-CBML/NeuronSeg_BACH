@@ -13,6 +13,7 @@ PHUI = PHII{1,2};
 PHVI = PHII{1,3};
 for i = 1:ac_ct,
     
+    %length term
     term3f = BIGMUXf(1+(i-1)*xlen:i*xlen,1:6);
     term4f = BIGMUYf(1+(i-1)*xlen:i*xlen,1:6);
     term5f = BIGMVXf(1+(i-1)*xlen:i*xlen,1:6);
@@ -24,7 +25,6 @@ for i = 1:ac_ct,
     supp_size = size(SB,1);
 
     for bg = 1:supp_size,
-        %BBMvector = Bvect{SB(bg,2),1};
         valm1f = zeros(xlen,xlen);
         valm2f = zeros(xlen,xlen);
 
@@ -34,16 +34,21 @@ for i = 1:ac_ct,
                 phi_ui = supp_phiu(bg,gg1,gg2);
                 phi_vi = supp_phiv(bg,gg1,gg2);
 
+                %area term
+                area = (term3f(gg1,gg2).^2 + term4f(gg1,gg2).^2)*(term5f(gg1,gg2).^2 + term6f(gg1,gg2).^2)-(term3f(gg1,gg2)*term5f(gg1,gg2) + term4f(gg1,gg2)*term6f(gg1,gg2));
+                
                 arxf = term3f(gg1,gg2)*(term5f(gg1,gg2).^2 + term6f(gg1,gg2).^2) - (term3f(gg1,gg2)*term5f(gg1,gg2) + term4f(gg1,gg2)*term6f(gg1,gg2))*term5f(gg1,gg2);
                 brxf = term5f(gg1,gg2)*(term3f(gg1,gg2).^2 + term4f(gg1,gg2).^2) - (term3f(gg1,gg2)*term5f(gg1,gg2) + term4f(gg1,gg2)*term6f(gg1,gg2))*term3f(gg1,gg2);
                 aryf = term4f(gg1,gg2)*(term5f(gg1,gg2).^2 + term6f(gg1,gg2).^2) - (term3f(gg1,gg2)*term5f(gg1,gg2) + term4f(gg1,gg2)*term6f(gg1,gg2))*term6f(gg1,gg2);
                 bryf = term6f(gg1,gg2)*(term3f(gg1,gg2).^2 + term4f(gg1,gg2).^2) - (term3f(gg1,gg2)*term5f(gg1,gg2) + term4f(gg1,gg2)*term6f(gg1,gg2))*term4f(gg1,gg2);
 
-                valm1f(gg1,gg2) = parameters.lambda1*((term3f(gg1,gg2)-1)*phi_ui+term5f(gg1,gg2)*phi_vi)+parameters.lambda2*(arxf*phi_ui+brxf*phi_vi);
-                valm2f(gg1,gg2) = parameters.lambda1*(term4f(gg1,gg2)*phi_ui+(term6f(gg1,gg2)-1)*phi_vi)+parameters.lambda2*(aryf*phi_ui+bryf*phi_vi);
+                
+                valm1f(gg1,gg2) = 2*parameters.lambda1*((term3f(gg1,gg2)-1)*phi_ui+term5f(gg1,gg2)*phi_vi)+2*max(area-1,0)*parameters.lambda2*(arxf*phi_ui+brxf*phi_vi);
+                valm2f(gg1,gg2) = 2*parameters.lambda1*(term4f(gg1,gg2)*phi_ui+(term6f(gg1,gg2)-1)*phi_vi)+2*max(area-1,0)*parameters.lambda2*(aryf*phi_ui+bryf*phi_vi);
                
             end
         end
+        
         h1 = H(i,1);
         h2 = H(i,2);
         val1f = w1' * valm1f * w2 * h1 * h2;
