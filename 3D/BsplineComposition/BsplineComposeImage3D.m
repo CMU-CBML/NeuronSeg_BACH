@@ -1,4 +1,8 @@
 function [ I0_new ] = BsplineComposeImage3D(nx, ny, nz,  VXL, VYL, VZL, CI0)
+%source code: https://github.com/stellaccl/cdmffd-image-registration
+%paper: Chan, C. L., Anitescu, C., Zhang, Y., & Rabczuk, T. (2017). Two and three dimensional image registration based on B-spline composition and level sets. 
+%Communications in Computational Physics, 21(2), 600-622.
+
 %BsplineComposeImage3D compose the transformation field VXL, VYL, VZL, with the image (intensity) given in terms of a B-Spline level-set by coef
 %Note:VXL, VYL, VZL should be between 0...nx, 0..ny, 0..nz respectively
 

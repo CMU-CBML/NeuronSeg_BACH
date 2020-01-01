@@ -1,4 +1,8 @@
 function [ I0_new, I0dx_new, I0dy_new, I0dz_new] = BsplineComposeImage3D_single( Vx, Vy, Vz, coef, nx, ny, nz)
+%source code: https://github.com/stellaccl/cdmffd-image-registration
+%paper: Chan, C. L., Anitescu, C., Zhang, Y., & Rabczuk, T. (2017). Two and three dimensional image registration based on B-spline composition and level sets. 
+%Communications in Computational Physics, 21(2), 600-622.
+
 %BsplineComposeImage2D compose the transformation field Vx, Vy, with the image (intensity) given in terms of a B-Spline level-set by coef
 %input:  Vx, Vy = transformation field
 %        coef   = coef of Bspline level set of the image
