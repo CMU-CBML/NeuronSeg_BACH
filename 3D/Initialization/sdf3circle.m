@@ -1,4 +1,4 @@
-function f = sdf2circle(nrow,ncol,nslice, ic,jc,kc, r)
+function f = sdf3circle(nrow,ncol,nslice, ic,jc,kc, r)
 %   sdf2circle(nrow,ncol, ic,jc,r) computes the signed distance to a circle
 %   input: 
 %       nrow: number of rows
@@ -18,4 +18,3 @@ function f = sdf2circle(nrow,ncol,nslice, ic,jc,kc, r)
 
 f = sqrt((X-jc).^2 + (Y-ic).^2 + (Z-kc).^2)-r;
 
-%f=sdf2circle(100,50,51,25,10);figure;imagesc(f)
