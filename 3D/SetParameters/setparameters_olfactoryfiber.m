@@ -1,8 +1,8 @@
-function param = setparameters_helix()
+function param = setparameters_olfactoryfiber()
 %This function sets the parameters for the neuron segmentation
 
 %Maximum number of iterations
-maxiteration = 200;
+maxiteration = 10;
 
 %Degree of B-splines
 pU = 2;
@@ -17,11 +17,11 @@ maxlevelg = 3;
 orderGauss = 4;
 
 %initial grid: number of elements in x,y,z direction for level 1
-m_var = 10;
-n_var = 10;
-o_var = 10;
+m_var = 30;
+n_var = 30;
+o_var = 30;
 
-%regularization parameters 
+%regularization parameters
 lambda_1 = 0.01;
 lambda_2 = 0.01;
 lambda_3 = 0.01;
@@ -59,17 +59,17 @@ nobV(level,1) = kV(level,1) - pV - 1;
 nobW(level,1) = kW(level,1) - pW - 1;
 end
 
-rho(1,1) = 0.5; %level 2 refinement
-rho(2,1) = 1.0; %level 3 refinement
+rho(1,1) = 1; %level 2 refinement
+rho(2,1) = 3; %level 3 refinement
 rho(3,1) = 1;
 
-timestep(1,1) = 0.0004; 
-timestep(2,1) = 0.00008;
-timestep(3,1) = 0.00001;
+timestep(1,1) = 0.001; 
+timestep(2,1) = 0.0005;
+timestep(3,1) = 0.0001;
 
 sigma = 20;% the key parameter which needs to be tuned properly.
-sigma_phi = 20;% the variance of regularized Gaussian kernel
-epsilon = 0.25;
+sigma_phi = 100;% the variance of regularized Gaussian kernel
+epsilon = 10;
 
 %make a struct variable param, with all the parameters
 param = struct('pU',pU,'pV',pV,'pW',pW,'maxiteration',maxiteration,'maxlevel',maxlevel,'nelemU',nelemU,'nelemV',nelemV,'nelemW',nelemW,...
