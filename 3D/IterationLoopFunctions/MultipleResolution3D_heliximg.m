@@ -1,4 +1,4 @@
-function [phi,VF] = MultipleResolution3D_heliximg_old(F,phi,param,Img1)
+function [phi,VF] = MultipleResolution3D_heliximg(F,phi,param,Img1)
 
 [X,Y,Z] = meshgrid(0.5:size(F,1)-0.5,0.5:size(F,2)-0.5,0.5:size(F,3)-0.5);
 
