@@ -1,5 +1,6 @@
 function [PXF] = computenewpoints(M,Pixel,Jm,Pm)
 
+%% This function evaluates new positions of the pixel coordinates
 px = 0;
 pxxf= zeros(size(M,1),size(M,2));
 pyyf= zeros(size(M,1),size(M,2));
