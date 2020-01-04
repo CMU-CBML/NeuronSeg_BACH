@@ -1,5 +1,6 @@
 function [RHS] = computeIntegrationFidelity(Bterm_seg, Jm, PHI, Dm, H,Bvect)
 
+%% This function evaluates the first order variation of the energy functional delta_E_LIF
 [~,w1] = ggquad(6);
 xlen =6;
 w2 = w1;
