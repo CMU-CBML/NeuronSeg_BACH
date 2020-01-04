@@ -1,28 +1,21 @@
 function [x, y] = find_nucleus_center(inputImg, inputImg1, kernelSize, kernelScale, threRatio, minSizeCell, levelsetR)
  
+% Source code for soma detection taken from: https://github.com/kilho/NIA
+% Paper: Kim, K. M., Son, K., & Palmore, G. T. R. (2015). Neuron image analyzer: 
+% Automated and accurate extraction of neuronal data from low quality images. Scientific reports, 5, 17062.
+% Paper: Li, C., Xu, C., Gui, C., & Fox, M. D. (2010). Distance regularized level set evolution and its
+% application to image segmentation. IEEE transactions on image processing, 19(12), 3243-3254.
+
+
 [height, width] = size(inputImg);
 % make kernel and convolution
 LoG = LoG_kernel(kernelSize,kernelScale);
 LoGImg = conv2(inputImg, LoG, 'same');
-% figure(2)
-% imagesc(LoGImg)
-% title('LoG image')
-% colorbar
-% axis off
-
-%     figure(21)
-%     [tempX tempY] = meshgrid(1:kernelSize, 1:kernelSize);
-%     surf(tempX, tempY, LoG)
 
 % threshold 
 threshold = min(min(LoGImg));
 threRatioImg = LoGImg/threshold;
 threImg = (threRatioImg >= threRatio);
-
-% saveThreImg = threImg;
-%     figure(3)
-%     imagesc(threImg);
-%     title('threshold image')
 
 % getting rid of detection on boundary of image
     threImg(1:minSizeCell,:) = 0;
@@ -42,33 +35,5 @@ for j = minSizeCell+1 : height-minSizeCell
         end
     end
 end
-%     figure(4)
-%     imagesc(threImg);
-%     title('threshold image with non maximum supression')
 
-% center of cell
-%tempIdx = find(threImg == 1);
-%x = ceil((tempIdx-1)/height);
-%y = mod(tempIdx-1,height)+1;
 [y, x] = find(threImg == 1);
-% numNeuron = length(x);
-
-% figure(3)
-% imshow(saveThreImg)
-% hold on
-% plot(x, y, 'g.', 'MarkerSize', 20)
-% hold off
-
-% %% necleus boundary detection
-% boundaryNecleus = 2*ones(height,width);
-% for j = 1:numNeuron
-%     centerPoint = [x(j) y(j)];
-%     tempBoundaryNecleus = levelset_necleus(centerPoint, levelsetR , inputImg1, height, width);
-%     boundaryNecleus = boundaryNecleus.*tempBoundaryNecleus/2;
-% end
-%     figure(100)
-%     imagesc(inputImg,[0, 1]); axis off; axis equal; colormap(gray); 
-%     hold on;
-%     contour(boundaryNecleus, [0,0], 'r');
-%     hold off;
-%     pause
