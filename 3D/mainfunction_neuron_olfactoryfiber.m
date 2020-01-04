@@ -14,7 +14,6 @@ addpath(strcat(path,'/PostProcessing'));
 addpath(strcat(path,'/Initialization'));
 addpath(strcat(path,'/SetParameters'));
 addpath(strcat(path,'/THBSpline'));
-addpath(strcat(path,'/initialization'));
 p = genpath('OlfactoryFiber');
 addpath(p);
 
