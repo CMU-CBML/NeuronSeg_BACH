@@ -1,0 +1,8 @@
+Download the TREES Toolbox and save it in the folder OlfactoryFiber/ folder. 
+The TREES toolbox is to be downloaded from: https://www.treestoolbox.org/download.html
+
+The gold standard reconstructions are in .SWC format and can be downloaded from: 
+http://diademchallenge.org/olfactory_projection_fibers_readme.html
+Extract 'Olfactory Projection Fibers.rar'. 
+The gold standard standard reconstructions can be found in the subfolder: 'Gold Standard Reconstructions'. 
+Save the files in OlfactoryFiber/ folder.
