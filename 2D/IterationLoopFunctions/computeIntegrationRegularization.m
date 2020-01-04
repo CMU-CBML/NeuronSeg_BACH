@@ -1,5 +1,6 @@
 function [RHSff] = computeIntegrationRegularization(parameters,H,BIGXf,BIGYf,Jm,Dm, PHII,RHSf)
 
+%% This function evaluates the first order variation of the enrgy functional corresponding to hyperelastic regularization E_REG
 ac_ct = size(Jm,1);
 xlen = 6;
 [s1,w1] = ggquad(xlen);
