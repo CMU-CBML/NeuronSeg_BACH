@@ -15,24 +15,24 @@ for iteration = 1:param.maxiteration+1
 
     D1E = Delta(phi,param.epsilon);
     vecD = D1E(:)';
-    coef_D = img2coef3D_mex(vecD,nx,ny,nz);
+    coef_D = img2coef3D(vecD,nx,ny,nz);
     CID = coef_D(:)';
     coef_matD = reshape(CID, nx+img_pU,ny+img_pV, nz+img_pW);
     
     Hphi = Heaviside(phi,param.epsilon);
     vecH = Hphi(:)';
-    coef_H = img2coef3D_mex(vecH,nx,ny,nz);
+    coef_H = img2coef3D(vecH,nx,ny,nz);
     CIH = coef_H(:)';
     coef_matH = reshape(CIH, nx+img_pU,ny+img_pV, nz+img_pW);
     
     [f1,f2] = Local_Avr(F_orig,Hphi,K);
     vec_f1 = f1(:)';
-    coef_f1 = img2coef3D_mex(vec_f1,nx,ny,nz);
+    coef_f1 = img2coef3D(vec_f1,nx,ny,nz);
     CI_f1 = coef_f1(:)';
     coef_matf1 = reshape(CI_f1, nx+img_pU,ny+img_pV, nz+img_pW);
     
     vec_f2 = f2(:)';
-    coef_f2 = img2coef3D_mex(vec_f2,nx,ny,nz);
+    coef_f2 = img2coef3D(vec_f2,nx,ny,nz);
     CI_f2 = coef_f2(:)';
     coef_matf2 = reshape(CI_f2, nx+img_pU,ny+img_pV, nz+img_pW);
     
@@ -42,11 +42,11 @@ for iteration = 1:param.maxiteration+1
     disp(iterct);
     toc
     tic
-    [ctempp,cDphiY, cDphiX,cDphiZ] =  BsplineComposeImage3D_single_mex(BIGY, BIGX, BIGZ, coef_matP, size(BIGX,1), size(BIGX,2), size(BIGX,3));
-    [dDelta, dt, dt1, dt2] =  BsplineComposeImage3D_single_mex(BIGY, BIGX, BIGZ, coef_matD, size(BIGX,1), size(BIGX,2), size(BIGX,3));
-    [dHphi, dt, dt1, dt2] =  BsplineComposeImage3D_single_mex(BIGY, BIGX, BIGZ, coef_matH, size(BIGX,1), size(BIGX,2), size(BIGX,3));
-    [df1, dt, dt1, dt2] =  BsplineComposeImage3D_single_mex(BIGY, BIGX, BIGZ, coef_matf1, size(BIGX,1), size(BIGX,2), size(BIGX,3));
-    [df2, dt, dt1, dt2] =  BsplineComposeImage3D_single_mex(BIGY, BIGX, BIGZ, coef_matf2, size(BIGX,1), size(BIGX,2), size(BIGX,3));
+    [ctempp,cDphiY, cDphiX,cDphiZ] =  BsplineComposeImage3D_single(BIGY, BIGX, BIGZ, coef_matP, size(BIGX,1), size(BIGX,2), size(BIGX,3));
+    [dDelta, dt, dt1, dt2] =  BsplineComposeImage3D_single(BIGY, BIGX, BIGZ, coef_matD, size(BIGX,1), size(BIGX,2), size(BIGX,3));
+    [dHphi, dt, dt1, dt2] =  BsplineComposeImage3D_single(BIGY, BIGX, BIGZ, coef_matH, size(BIGX,1), size(BIGX,2), size(BIGX,3));
+    [df1, dt, dt1, dt2] =  BsplineComposeImage3D_single(BIGY, BIGX, BIGZ, coef_matf1, size(BIGX,1), size(BIGX,2), size(BIGX,3));
+    [df2, dt, dt1, dt2] =  BsplineComposeImage3D_single(BIGY, BIGX, BIGZ, coef_matf2, size(BIGX,1), size(BIGX,2), size(BIGX,3));
     
     disp('cphi');
     toc
@@ -74,7 +74,7 @@ for iteration = 1:param.maxiteration+1
     ACCf(:,1:3) = ACCf(:,1:3) - timestep.*RHS(:,1:3);
     
     tic
-    [BIGXXf, BIGYYf, BIGZZf, BIGMUXf, BIGMUYf, BIGMUZf, BIGMVXf, BIGMVYf, BIGMVZf, BIGMWXf, BIGMWYf, BIGMWZf] =  computenewPoints_mex(Jm, ACCf, PHI1, PHIU1, PHIV1, PHIW1, orderGauss);
+    [BIGXXf, BIGYYf, BIGZZf, BIGMUXf, BIGMUYf, BIGMUZf, BIGMVXf, BIGMVYf, BIGMVZf, BIGMWXf, BIGMWYf, BIGMWZf] =  computenewPoints(Jm, ACCf, PHI1, PHIU1, PHIV1, PHIW1, orderGauss);
     
     disp('BIGXX computed');
     toc
@@ -167,7 +167,7 @@ for iteration = 1:param.maxiteration+1
     phi = interp3(Vx_ident,Vy_ident,Vz_ident,phi_orig,VXf_new,VYf_new, VZf_new);
     phi(isnan(phi)) = 0;
     vecP = phi(:)';
-    coef_P = img2coef3D_mex(vecP,nx,ny,nz);
+    coef_P = img2coef3D(vecP,nx,ny,nz);
     CIP = coef_P(:)';
     coef_matP = reshape(CIP, ny+img_pU, nx+img_pV, nz+img_pW);
     

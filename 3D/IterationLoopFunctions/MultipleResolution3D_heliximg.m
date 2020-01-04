@@ -33,9 +33,9 @@ VXLF=X(:)';
 VYLF=Y(:)';
 VZLF=Z(:)';
 
-coef_xf = img2coef3D_mex(VXLF,nx,ny,nz);   %coefficients for position x
-coef_yf = img2coef3D_mex(VYLF,nx,ny,nz);   %coefficients for position y
-coef_zf = img2coef3D_mex(VZLF,nx,ny,nz);   %coefficients for position z
+coef_xf = img2coef3D(VXLF,nx,ny,nz);   %coefficients for position x
+coef_yf = img2coef3D(VYLF,nx,ny,nz);   %coefficients for position y
+coef_zf = img2coef3D(VZLF,nx,ny,nz);   %coefficients for position z
 
 coef_xf_fun = reshape(coef_xf, 1, (nx+img_pU)*(ny+img_pV)*(nz+img_pW));
 coef_yf_fun = reshape(coef_yf, 1, (nx+img_pU)*(ny+img_pV)*(nz+img_pW));
@@ -69,26 +69,26 @@ for level = param.maxlevel:-1:1
     
     F = resize3Dmatrix(new_size_x,new_size_y,new_size_z,F);
     vecF = F(:)';
-    coef_F= img2coef3D_mex(vecF,npx,npy,npz);
+    coef_F= img2coef3D(vecF,npx,npy,npz);
     CIF = coef_F(:)';
     coef_matF = reshape(CIF, npy+img_pU, npx+img_pV, npz+img_pW); % this is an unnecessary step, check later!!!!
 
     phi = resize3Dmatrix(new_size_x,new_size_y,new_size_z,phi); % does not matter if phi00 or phi, because this only counts
     % for the first level which is anyway phi00.
     vecP = phi(:)';
-    coef_P = img2coef3D_mex(vecP,npx,npy,npz);
+    coef_P = img2coef3D(vecP,npx,npy,npz);
     CIP = coef_P(:)';
     coef_matP = reshape(CIP,npy+img_pU, npx+img_pV, npz+img_pW);
 
     F_orig = resize3Dmatrix(new_size_x,new_size_y,new_size_z,F00);
     vecForig = F_orig(:)';
-    coef_Forig= img2coef3D_mex(vecForig,npx,npy,npz);
+    coef_Forig= img2coef3D(vecForig,npx,npy,npz);
     CIForig = coef_Forig(:)';
     coef_matForig = reshape(CIForig,npy+img_pU, npx+img_pV, npz+img_pW);
     
     phi_orig = resize3Dmatrix(new_size_x,new_size_y,new_size_z,phi00);
     vecPorig = phi_orig(:)';
-    coef_Porig= img2coef3D_mex(vecPorig,npx,npy,npz);
+    coef_Porig= img2coef3D(vecPorig,npx,npy,npz);
     CIPorig = coef_Porig(:)';
     coef_matPorig = reshape(CIPorig,npy+img_pU, npx+img_pV, npz+img_pW);
 
@@ -146,8 +146,8 @@ for level = param.maxlevel:-1:1
         
         %% coef is in the vector form, see cdmffd code
 
-        coef_IF = img2coef3D_mex(II0F_ori, nx,ny, nz);
-        coef_Iphi = img2coef3D_mex(II0phi_ori,nx,ny,nz);
+        coef_IF = img2coef3D(II0F_ori, nx,ny, nz);
+        coef_Iphi = img2coef3D(II0phi_ori,nx,ny,nz);
 
         CI0phi = coef_Iphi(:)';
         
@@ -155,9 +155,9 @@ for level = param.maxlevel:-1:1
         VYLf = Vylf(:)';
         VZLf = Vzlf(:)';
 
-        phi = BsplineComposeImage3D_mex(nx,ny,nz,VXLf, VYLf, VZLf, CI0phi);
+        phi = BsplineComposeImage3D(nx,ny,nz,VXLf, VYLf, VZLf, CI0phi);
         vecP = phi(:)';
-        coef_P = img2coef3D_mex(vecP, nx, ny,nz);
+        coef_P = img2coef3D(vecP, nx, ny,nz);
         CIP = coef_P(:)';
         coef_matP = reshape(CIP,npy+img_pU, npx+img_pV, npz+img_pW);
 
@@ -171,17 +171,17 @@ for level = param.maxlevel:-1:1
     VYLf = Vylf(:)';
     VZLf = Vzlf(:)';
 
-    coef_xf = img2coef3D_mex(VXLf,nx,ny,nz);
-    coef_yf = img2coef3D_mex(VYLf,nx,ny,nz);
-    coef_zf = img2coef3D_mex(VZLf,nx,ny,nz);
+    coef_xf = img2coef3D(VXLf,nx,ny,nz);
+    coef_yf = img2coef3D(VYLf,nx,ny,nz);
+    coef_zf = img2coef3D(VZLf,nx,ny,nz);
 
     VXLf_inv = Vxlf_inv(:)';
     VYLf_inv = Vylf_inv(:)';
     VZLf_inv = Vzlf_inv(:)';
 
-    coef_xf_inv = img2coef3D_mex(VXLf_inv,nx,ny,nz);
-    coef_yf_inv = img2coef3D_mex(VYLf_inv,nx,ny,nz);
-    coef_zf_inv = img2coef3D_mex(VZLf_inv,nx,ny,nz);
+    coef_xf_inv = img2coef3D(VXLf_inv,nx,ny,nz);
+    coef_yf_inv = img2coef3D(VYLf_inv,nx,ny,nz);
+    coef_zf_inv = img2coef3D(VZLf_inv,nx,ny,nz);
 
     disp('set initial vectors for the level');
     toc
@@ -264,7 +264,7 @@ for level = param.maxlevel:-1:1
     BIGZF = BIGZ;
     
     %cI0fd = interp3(X_vtk,Y_vtk,Z_vtk,F_orig,BIGY,BIGX,BIGZ,'*linear',min(M(:)));
-    [cI0f, tempu1, tempu2, tempu3] =  BsplineComposeImage3D_single_mex(BIGY, BIGX, BIGZ, coef_matForig, size(BIGX,1), size(BIGX,2), size(BIGX,3));
+    [cI0f, tempu1, tempu2, tempu3] =  BsplineComposeImage3D_single(BIGY, BIGX, BIGZ, coef_matForig, size(BIGX,1), size(BIGX,2), size(BIGX,3));
 
     Node(:,4) = 0;
     for i=1:size(ActiveNodes,1)
