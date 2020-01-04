@@ -1,4 +1,6 @@
 function BBV = bcondition1(BBvector,D, bff, nbu)
+
+%% This function applies Dirichlet zero deformation boundary condition on the B-spline grid
 nlev = size(BBvector,1);
 
 for i=1:nlev,
