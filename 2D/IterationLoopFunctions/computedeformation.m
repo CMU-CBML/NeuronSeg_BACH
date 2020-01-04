@@ -1,5 +1,6 @@
 function [BIGXf,BIGYf] = computedeformation(Jm,PHI,PHIU,PHIV,Pmf)
 
+%% This function evaluates the deformed positions of the integration points 
 ac_ct = size(Jm,1);
 xlen = 6;
 
