@@ -1,3 +1,14 @@
+path = pwd;
+addpath(strcat(path,'/data'));
+addpath(strcat(path,'/BsplineComposition'));
+addpath(strcat(path,'/IterationLoopFunctions'));
+addpath(strcat(path,'/LevelSetFunctions'));
+addpath(strcat(path,'/PostProcessing'));
+addpath(strcat(path,'/Initialization'));
+addpath(strcat(path,'/SetParameters'));
+addpath(strcat(path,'/THBSpline'));
+disp('Added paths....');
+
 %% Create configuration object of class 'coder.MexCodeConfig'.
 cfg = coder.config('mex');
 cfg.GenerateReport = true;
