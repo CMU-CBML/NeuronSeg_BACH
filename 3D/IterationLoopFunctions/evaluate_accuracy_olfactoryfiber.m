@@ -1,6 +1,15 @@
 function [xy_Accuracy, z_Accuracy] = evaluate_accuracy_olfactoryfiber(phi,tree)
 
 %% Compare accuracy with gold standard
+
+%--Input Variable:
+%phi: final segmentation result
+%tree: ground truth tracing tree (SWC file) for checking accuracy
+
+%--Output Variable:
+%xy_Accuracy: the accuracy of matched points with ground truth in XY plane
+%z_Accuracy: the accuracy of matched points with ground truth in Z axis
+
 phi_img = zeros(size(phi));
 phi_img(phi<=0) = 1;
 OPVolLogical = logical(phi_img);
@@ -21,7 +30,7 @@ for i=1:size(phi,1)
         end
     end
 end
- 
+
 %% Compute Accuracy
 xy_threshold = 3.94;
 z_threshold = 5;
@@ -29,7 +38,7 @@ z_threshold = 5;
 target = [tree.Y,tree.X,tree.Z];
 source = [mytree_x,mytree_y,mytree_z];
 
-[Dist,Idist] = pdist2(source,target,'euclidean','Smallest',1);
+[~,Idist] = pdist2(source,target,'euclidean','Smallest',1);
 
 xycount = 0;
 zcount = 0;
@@ -49,9 +58,9 @@ for points = 1:length(tree.X)
     
     if(Dz<=z_threshold)
         zcount = zcount+1;
-    end  
+    end
     
-        
+    
     if(Dxy<=xy_threshold && Dz<=z_threshold)
         final_treex = [final_treex;mytree_x(Idist(points))];
         final_treey = [final_treey;mytree_y(Idist(points))];

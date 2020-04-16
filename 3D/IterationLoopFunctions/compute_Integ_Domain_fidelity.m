@@ -12,7 +12,9 @@ function RHS = compute_Integ_Domain_fidelity(Jm,Bseg,Bsegx,Bsegy,Bsegz,RHSf,PHI1
 %w1, w2, w3: weights of Gaussian integration
 %H : size of each B-spline control grid element
 
-%OUTPUT: Right hand side matrix for updating control points
+%OUTPUT:
+%RHS: Right hand side matrix for updating control points
+
 ac_ct = size(Jm,1);
 bf_ct = size(RHSf,1);
 xlen = 4;

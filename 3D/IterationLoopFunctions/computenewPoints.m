@@ -23,7 +23,7 @@ function [BIGXX,BIGYY,BIGZZ,BIGMUX,BIGMUY,BIGMUZ,BIGMVX,BIGMVY,BIGMVZ,BIGMWX,BIG
 % BIGMWX, BIGMWY, BIGMWZ: f_w(x) computed at the gauss points in the control
 % grid
 
-%% 
+%%
 %number of active elements
 ac_ct = length(Jm);
 
@@ -127,3 +127,5 @@ BIGMVZ = reshape(BIGMVZ,ac_ct*xlen,xlen,xlen);
 BIGMWX = reshape(BIGMWX,ac_ct*xlen,xlen,xlen);
 BIGMWY = reshape(BIGMWY,ac_ct*xlen,xlen,xlen);
 BIGMWZ = reshape(BIGMWZ,ac_ct*xlen,xlen,xlen);
+
+end
