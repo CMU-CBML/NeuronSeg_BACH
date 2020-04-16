@@ -1,4 +1,5 @@
 function [InitialGuess] = neuron_initialization(Img_input)
+
 %% Soma detection
 % Source code for soma detection taken from: https://github.com/kilho/NIA
 % Paper: Kim, K. M., Son, K., & Palmore, G. T. R. (2015). Neuron image analyzer: 
@@ -6,21 +7,18 @@ function [InitialGuess] = neuron_initialization(Img_input)
 % Paper: Li, C., Xu, C., Gui, C., & Fox, M. D. (2010). Distance regularized level set evolution and its
 % application to image segmentation. IEEE transactions on image processing, 19(12), 3243-3254.
 
-% Input: Img: input image
-% Ouput: InitialGuess: binary image describing initial guess for level set
+% Input: Img_input: input image
+% Output: InitialGuess: binary image describing initial guess for level set
 % function
 
 % parameter for detecting nucleus
 kernelSize      = 20;               % size of LoG filter (unit: pixel) (depend on the scale of image)
 kernelScale     = 10;               % scale of LoG filter (unit: pixel) (depend on the scale of image)
 threRatio       = 0.1;              % threshod for detecting cell (not critical parameter)
-levelsetR       = 4;               % parameter for level set (refer to "Distance Regularized Level Set Evolution and Its Application to Image Segmentation", in IEEE TRANSACTIONS ON IMAGE PROCESSING)        
-sigma = 3; %smooth image before intialization
 neurite_threshold = 0.07; %threshold to detect neurite
 disk_radius = 4;
 
 minSizeCell     = kernelSize/2;     % minimum size of cell
-Img = imgaussfilt(Img,sigma); %Apply Gaussian Filter on the image
 M3D = zeros(size(Img_input));
 nslices = size(Img_input,3);
 
@@ -31,9 +29,8 @@ inputImg1 = double(Img);
 inputImg = inputImg1/(max(inputImg1(:)));
 
 %Find the soma center using non-maximal suppression
-[x, y]  = find_nucleus_center(inputImg, inputImg1, kernelSize, kernelScale, threRatio, minSizeCell, levelsetR);
+[x, y]  = find_nucleus_center(inputImg,kernelSize, kernelScale, threRatio, minSizeCell);
 
-[height, width] = size(inputImg);
 % make kernel and convolution
 LoG = LoG_kernel(kernelSize,kernelScale);
 LoGImg = conv2(inputImg, LoG, 'same');
@@ -54,6 +51,7 @@ BW_neurite(BW>=neurite_threshold) = 1;
 
 %Binary image with neurites detected
 M = zeros(size(Img));
+M(BW_soma>0) = 0;
 M(BW_neurite>0) = 1;
 
 %% Clean initial guess using connected component analysis
