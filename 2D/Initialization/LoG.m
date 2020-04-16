@@ -2,15 +2,14 @@ function resultat = LoG(x,y,sigma)
 % function resultat = LoG(x,y,sigma)
 % Laplacien d'une fonction gaussienne
 % 
-% Ce Laplacien est normalisé pour avoir un 
-% scale space normalisé.
+% This function computes the LoG filter kernel entries
 %
 % Inputs :
-%    x, y : points où l'on calcule la fonction
-%    sigma : largeur de la gaussienne
-% 
+%    size : size of LoG kernel
+%    scale : radius of disk shaped filter
+%
 % Output :
-%    resultat : valeur de la fonction en ce point
+%    resultat : matrix entries for the LoG kernel
 
 % Fait par JB Fiot pour l'assignement 1 du cours 
 % de Reconnaissance d'objets et vision artificielle

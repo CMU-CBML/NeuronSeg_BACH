@@ -7,15 +7,18 @@ function [InitialGuess] = neuron03_initialization(Img)
 % Paper: Li, C., Xu, C., Gui, C., & Fox, M. D. (2010). Distance regularized level set evolution and its
 % application to image segmentation. IEEE transactions on image processing, 19(12), 3243-3254.
 
-% Input: Img: input image
-% Ouput: InitialGuess: binary image describing initial guess for level set
-% function
+%-- Input:
+
+%Img: input image
+
+%-- Output: 
+
+%InitialGuess: binary image describing initial guess for level set function
 
 % parameter for detecting nucleus
 kernelSize      = 80;               % size of LoG filter (unit: pixel) (depend on the scale of image)
 kernelScale     = 20;               % scale of LoG filter (unit: pixel) (depend on the scale of image)
 threRatio       = 0.5;              % threshod for detecting cell (not critical parameter)
-levelsetR       = 40;               % parameter for level set (refer to "Distance Regularized Level Set Evolution and Its Application to Image Segmentation", in IEEE TRANSACTIONS ON IMAGE PROCESSING)
 sigma = 3; %smooth image before intialization
 neurite_threshold = 0.07; %threshold to detect neurite
 disk_radius = 6;
@@ -26,9 +29,8 @@ inputImg1 = double(Img);
 inputImg = inputImg1/(max(inputImg1(:)));
 
 %Find the soma center using non-maximal suppression
-[x, y]  = find_nucleus_center(inputImg, inputImg1, kernelSize, kernelScale, threRatio, minSizeCell, levelsetR);
+[x, y]  = find_nucleus_center(inputImg, kernelSize, kernelScale, threRatio, minSizeCell);
 
-[height, width] = size(inputImg);
 % make kernel and convolution
 LoG = LoG_kernel(kernelSize,kernelScale);
 LoGImg = conv2(inputImg, LoG, 'same');
