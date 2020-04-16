@@ -1,5 +1,28 @@
 function param = setparameters_olfactoryfiber()
-%This function sets the parameters for the neuron segmentation
+%This function sets the parameters for the 3D neuron segmentation
+
+%--Input Variables
+
+%--Output Variables
+
+%param: struct variable storing the parameters for the neuron
+%segmentation consisting of the following fields
+%maxiteration: number of maximum iterations for each refinement level
+%pU, pV, pW: B-spline degree in each parametric direction
+%maxlevel: number of image resolution levels
+%maxlevelg: number of refinement levels
+%orderGauss: Gaussian quadrature order
+%m_var, n_var, o_var: number of elements in each direction at the first
+%refinement level
+%lambda1, lambda2, lambda3: regularization parameters
+% nelemU, nelemV, nelemW: number of elements at each refinement levels
+% nobU, nobV, nobW: number of splines in each direction at each level
+%kU, kV, kW: number of knot vectors in each refinement level
+%rho: threshold parameter for the refinement of B-splines
+%timestep: time step value for each refinement level
+%sigma: G_sigma: the key parameter which needs to be tuned properly for local image fitting
+%sigma_phi:%G_sigma_phi: the variance of regularized Gaussian kernel
+%epsilon:width of level set function
 
 %Maximum number of iterations
 maxiteration = 10;
@@ -37,7 +60,7 @@ nobV = zeros(maxlevelg,1);
 nobW = zeros(maxlevelg,1);
 
 %number of knot vectors in each direction at each level
-kU = zeros(maxlevelg,1); 
+kU = zeros(maxlevelg,1);
 kV = zeros(maxlevelg,1);
 kW = zeros(maxlevelg,1);
 
@@ -46,24 +69,24 @@ timestep = zeros(maxlevelg,1); %timestep for each refinement level
 
 %number of elements in each direction
 for level = 1:maxlevelg
-nelemU(level,1) = m_var*2^(level-1);
-nelemV(level,1) = n_var*2^(level-1);
-nelemW(level,1) = o_var*2^(level-1);
-
-kU(level,1) = nelemU(level,1)+2*pU+1;
-kV(level,1) = nelemV(level,1)+2*pU+1;
-kW(level,1) = nelemW(level,1)+2*pU+1;
-
-nobU(level,1) = kU(level,1) - pU - 1;
-nobV(level,1) = kV(level,1) - pV - 1;
-nobW(level,1) = kW(level,1) - pW - 1;
+    nelemU(level,1) = m_var*2^(level-1);
+    nelemV(level,1) = n_var*2^(level-1);
+    nelemW(level,1) = o_var*2^(level-1);
+    
+    kU(level,1) = nelemU(level,1)+2*pU+1;
+    kV(level,1) = nelemV(level,1)+2*pU+1;
+    kW(level,1) = nelemW(level,1)+2*pU+1;
+    
+    nobU(level,1) = kU(level,1) - pU - 1;
+    nobV(level,1) = kV(level,1) - pV - 1;
+    nobW(level,1) = kW(level,1) - pW - 1;
 end
 
 rho(1,1) = 1; %level 2 refinement
 rho(2,1) = 3; %level 3 refinement
 rho(3,1) = 1;
 
-timestep(1,1) = 0.001; 
+timestep(1,1) = 0.001;
 timestep(2,1) = 0.0005;
 timestep(3,1) = 0.0001;
 
