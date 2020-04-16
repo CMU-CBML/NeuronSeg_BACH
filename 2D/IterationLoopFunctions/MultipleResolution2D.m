@@ -452,9 +452,9 @@ for level = param.maxlevel:-1:1
         plotGrid(FgridX, FgridY)
         axis ([1 nx 1 ny])
         colormap('gray')
-        set(gca,'position',[0 0 1 1],'units','normalized')
+        %set(gca,'position',[0 0 1 1],'units','normalized')
         set(gca,'YDir','reverse');
-        
+        hold off
         drawnow
         
     end
@@ -468,16 +468,15 @@ for level = param.maxlevel:-1:1
     hold off
     set(gca,'position',[0 0 1 1],'units','normalized')
     colormap gray
-    drawnow
-    
+
     figure
     plotGrid(FgridX, FgridY)
     axis ([1 nx 1 ny])
     colormap('gray')
     set(gca,'position',[0 0 1 1],'units','normalized')
     set(gca,'YDir','reverse');
-    drawnow
-    
+    hold off
+
     %upsample the image to original size
     Vxf = imresize(Vxf/scale,size(F00));
     Vyf = imresize(Vyf/scale,size(F00));
