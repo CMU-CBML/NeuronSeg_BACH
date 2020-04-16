@@ -1,6 +1,43 @@
 function [Dm,Pm,Em,Bvect,knotvectorU,knotvectorV,nobU,nobV,nelemU] = setBsplineGrid(maxlev,parameters,F)
 
+%This function initializes the THB-spline data structure which consists of
+%the basis function struct element, control grid element, knot vectors and
+%control points. These are the ingredients for the THB-spline refinement
+%and control grid
+
+%--Input Variables:
+%maxlev: Maximum refinement level
+
+%parameters: struct variable storing the parameters for the neuron
+%segmentation consisting of the following fields
+%rho: threshold parameter for the refinement of B-splines
+%orderGauss: Gaussian quadrature order
+%maxlevel: number of refinement levels
+%lambda1, lambda2, lambda3: regularization parameters
+%maxiteration: number of maximum iterations for each refinement level
+%timestep: time step value for each refinement level
+%nelemx, nelemy: number of elements in each direction at the first
+%refinement level
+%pU, pV: B-spline degree
+%sigma: G_sigma: the key parameter which needs to be tuned properly for local image fitting
+%sigma_phi:%G_sigma_phi: the variance of regularized Gaussian kernel
+%epsilon:width of level set function
+
+%F: Input image to be segmented
+
+%--Output Variables:
+%Dm: Basis data struct variable storing the B-spline basis function information
+%Pm: THB-spline control points 
+%Em: Data struct variable storing the control grid element information
+%Bvect: RHS of updating the control points
+%knotvectorU: knot vector in u direction
+%knotvectorV: knot vector in v directiom
+%nobU: number of B-splines in u direction
+%nobV: number of B-splines in v direction
+%nelemU: number of elements in u direction
+
 CP = cell(maxlev,1);
+Bvect = cell(maxlev,1);
 
 knotvectorU = cell(maxlev,1);
 nelemU = zeros(maxlev,1);
@@ -19,7 +56,7 @@ nelemx = parameters.nelemx;
 nelemy = parameters.nelemy;
 
 %% Knotvectors
-for lev = 1:maxlev,
+for lev = 1:maxlev
     knotvectorU{lev,1} = [0.*ones(1,pU), 0:0.5^(lev-1)*size(F,2)/nelemx:size(F,2), size(F,2).*ones(1,pU)];
     uknotvectorU{lev,1} = unique(knotvectorU{lev,1});
     nelemU(lev,1) = size(uknotvectorU{lev,1},2) -1;
@@ -47,7 +84,7 @@ ch = zeros(4,1);
 connectU = zeros(2,1);
 connectV = zeros(2,1);
 
-for lev = 1:maxlev,
+for lev = 1:maxlev
     knotU = knotvectorU{lev,1};
     knotV = knotvectorV{lev,1};
     supp_ct = zeros(nobU(lev,1)*nobV(lev,1),1);
@@ -61,10 +98,10 @@ for lev = 1:maxlev,
     E = 0;
     BBvector = zeros(1,(1+pU)*(1+pV));
     EEN = cell(nelemU(lev,1)*nelemV(lev,1),9);
-    for intU = 1:nobU(lev,1),
-        for intV = 1:nobV(lev,1),
+    for intU = 1:nobU(lev,1)
+        for intV = 1:nobV(lev,1)
             glnumnodes = glnumnodes + 1;
-            if((intU>=(pU+1))&&(intV>=(pV+1))),
+            if((intU>=(pU+1))&&(intV>=(pV+1)))
                 E = E+1;
                 if(lev>1)
                     pcell = PC{lev,1};
@@ -72,7 +109,7 @@ for lev = 1:maxlev,
                 end
                 yind = ceil(E/nelemU(lev,1));
                 xind = mod(E,nelemU(lev,1));
-                if(xind==0),
+                if(xind==0)
                     xind = nelemU(lev,1);
                 end
                 i = 1;
@@ -88,7 +125,7 @@ for lev = 1:maxlev,
                 EEN{E,2} = connectV;
                 EEN{E,3} = connectU;
                 
-                if(lev==1),
+                if(lev==1)
                     EEN{E,4} = 1;
                 else
                     EEN{E,4} = 0;
@@ -99,7 +136,7 @@ for lev = 1:maxlev,
                     ch(2,1) = nelemU(lev+1,1)*((2*yind-1)-1)+(2*xind);
                     ch(3,1) = nelemU(lev+1,1)*((2*yind)-1)+(2*xind);
                     ch(4,1) = nelemU(lev+1,1)*((2*yind)-1)+(2*xind-1);
-                    for pct = 1:4,
+                    for pct = 1:4
                         Parcell(ch(pct,1),1) = E;
                     end
                 else
@@ -108,8 +145,8 @@ for lev = 1:maxlev,
                 EEN{E,5} = ch;
                 
                 
-                for loci = 1:pU+1,
-                    for locj = 1:pV+1,
+                for loci = 1:pU+1
+                    for locj = 1:pV+1
                         B  = glnumnodes - (loci-1)*(kV(lev,1)-pV-1) -locj + 1;
                         BBvector(1,i) = B;
                         supp_ct(B,1) = supp_ct(B,1)+1;
@@ -138,10 +175,10 @@ for lev = 1:maxlev,
     end
     CCX = zeros(sqrt(size(EEM,1)));
     CCY = zeros(sqrt(size(EEM,1)));
-    for i = 1:size(EEM,1),
+    for i = 1:size(EEM,1)
         yind = ceil(i/nelemU(lev,1));
         xind = mod(i,nelemU(lev,1));
-        if(xind==0),
+        if(xind==0)
             xind = nelemU(lev,1);
         end
         CCX(xind,yind) = EEM{i,8};
@@ -162,10 +199,10 @@ for lev = 1:maxlev,
     
     
     bc = 0;
-    for basis_i =1:nobU(lev,1),
-        for basis_j = 1:nobV(lev,1),
+    for basis_i =1:nobU(lev,1)
+        for basis_j = 1:nobV(lev,1)
             bc=bc+1;
-            if(lev>1),
+            if(lev>1)
                 AC = AA{lev,1};
                 Basis_m{bc,5} = AC(bc,:);
             end
@@ -177,21 +214,21 @@ for lev = 1:maxlev,
             Basis_m{bc,2} = lev;
             Basis_m{bc,8} = 0;
             Basis_m{bc,9} = 0;
-            if(lev==1),
+            if(lev==1)
                 Basis_m{bc,3} = 1;
             else
                 Basis_m{bc,3} = 0;
             end
             
             Basis_m{bc,7} = 0;
-            for iU = 1:nobU(lev,1),
+            for iU = 1:nobU(lev,1)
                 dof1 = iU;
                 Basis_m{dof1,9} = 1;
                 dof2 = iU + nobU(lev,1)*(nobV(lev,1)-1);
                 Basis_m{dof2,9} = 1;
             end
             
-            for iV = 1:nobV(lev,1),
+            for iV = 1:nobV(lev,1)
                 dof3 = 1+nobU(lev,1)*(iV-1);
                 Basis_m{dof3,9}  =1;
                 dof4 = nobU(lev,1)+nobU(lev,1)*(iV-1);
@@ -204,7 +241,7 @@ for lev = 1:maxlev,
                 intc_v1 = knot_cv(1,basis_i);
                 intc_v2 = knot_cv(1,basis_i+pV+1);
                 
-                if(basis_j < pU+1),
+                if(basis_j < pU+1)
                     uindex_start = basis_j;
                 else
                     uindex_start = FindSpan(nobU(lev+1,1),pU,intc_u1,knot_fu)+1;
@@ -216,7 +253,7 @@ for lev = 1:maxlev,
                     uindex_end = FindSpan(nobU(lev+1,1),pU,intc_u2,knot_fu)+1;
                 end
                 
-                if(basis_i < pV+1),
+                if(basis_i < pV+1)
                     vindex_start = basis_i;
                 else
                     vindex_start = FindSpan(nobV(lev+1,1),pV,intc_v1,knot_fv)+1;
@@ -246,8 +283,8 @@ for lev = 1:maxlev,
                 Coeff = zeros(nob_childu*nob_childv,2);
                 C = zeros(nob_childu*nob_childv,2);
                 cc=0;
-                for c_childu = 1:nob_childv,
-                    for c_childv = 1:nob_childu,
+                for c_childu = 1:nob_childv
+                    for c_childv = 1:nob_childu
                         cc= cc+1;
                         C(cc,1) = uindex_start+(c_childv-1);
                         C(cc,2) = vindex_start+(c_childu-1);
@@ -285,8 +322,8 @@ knotu = knotvectorU{1,1};
 knotv = knotvectorV{1,1};
 
 pp = zeros(nobU(1,1)*nobV(1,1),2);
-for i = 1:nobU(1,1),
-    for j =1:nobV(1,1),
+for i = 1:nobU(1,1)
+    for j =1:nobV(1,1)
         index27=(i-1)*nobV(1,1)+j;
         coordx = sum(knotu(i+1:i+pU))./pU;
         coordy = sum(knotv(j+1:j+pV))./pV;

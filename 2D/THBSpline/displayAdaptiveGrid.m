@@ -1,5 +1,33 @@
 function [] = displayAdaptiveGrid(ac,Coeff,Em,knotvectorU,knotvectorV,Jm,Pmold,parameters,nx,ny)
 
+%This function displays the adaptive grid after THB spline refinement
+
+%--Input Variable:
+%ac: active element array storing the cell indices and refinement levels of
+%active elements
+%Coeff: subdivision coefficient matrix during THB-spline refinement
+%Em: Data struct variable storing the control grid element information
+%knotvectorU, knotvectorV: knot vector in u and v directions
+%Jm: Struct variable storing supoort B-splines over each active cell
+%Pmold: Control point array
+
+%parameters: struct variable storing the parameters for the neuron
+%segmentation consisting of the following fields
+%rho: threshold parameter for the refinement of B-splines
+%orderGauss: Gaussian quadrature order
+%maxlevel: number of refinement levels
+%lambda1, lambda2, lambda3: regularization parameters
+%maxiteration: number of maximum iterations for each refinement level
+%timestep: time step value for each refinement level
+%nelemx, nelemy: number of elements in each direction at the first
+%refinement level
+%pU, pV: B-spline degree
+%sigma: G_sigma: the key parameter which needs to be tuned properly for local image fitting
+%sigma_phi:%G_sigma_phi: the variance of regularized Gaussian kernel
+%epsilon:width of level set function
+
+%nx,ny: image size nx X ny
+
 figure;
 ac_ct = size(ac,1);
 CF = cell(ac_ct,1);
@@ -38,7 +66,7 @@ for i = 1:ac_ct
     fx(4,2) = y2;
     cfx = zeros(4,2);
     
-    for j =1:4,
+    for j =1:4
         
         uu = fx(j,1);
         vv = fx(j,2);
@@ -50,15 +78,15 @@ for i = 1:ac_ct
         RR = RR1'*RR2;
         inc=0;
         phii=zeros(16,1);
-        for m1=1:size(RR,1),
-            for m2=1:size(RR,2),
+        for m1=1:size(RR,1)
+            for m2=1:size(RR,2)
                 
                 phii(16-inc,1) = RR(m2,m1);
                 inc = inc+1;
             end
         end
         PHID = c1*phii;
-        for k = 1:supp_size1,
+        for k = 1:supp_size1
             CEb = Pmold{SB1(k,2),1};
             pi = CEb(SB1(k,1),1);
             pj = CEb(SB1(k,1),2);
