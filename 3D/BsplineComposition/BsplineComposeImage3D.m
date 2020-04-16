@@ -1,23 +1,25 @@
 function [ I0_new ] = BsplineComposeImage3D(nx, ny, nz,  VXL, VYL, VZL, CI0)
 %source code: https://github.com/stellaccl/cdmffd-image-registration
-%paper: Chan, C. L., Anitescu, C., Zhang, Y., & Rabczuk, T. (2017). Two and three dimensional image registration based on B-spline composition and level sets. 
+%paper: Chan, C. L., Anitescu, C., Zhang, Y., & Rabczuk, T. (2017). Two and three dimensional image registration based on B-spline composition and level sets.
 %Communications in Computational Physics, 21(2), 600-622.
 
 %BsplineComposeImage3D compose the transformation field VXL, VYL, VZL, with the image (intensity) given in terms of a B-Spline level-set by coef
 %Note:VXL, VYL, VZL should be between 0...nx, 0..ny, 0..nz respectively
 
-% input:   nx, ny, nz = size of image correspond to coefficent (CI0)
-%         VXL,VYL,VZL = transformation field in x, y, and z direction respectively. 
-%                 CI0 = coefficient of the image.
+% Input Variable:
+%  nx, ny, nz = size of image correspond to coefficent (CI0)
+%  VXL,VYL,VZL = transformation field in x, y, and z direction respectively.
+%  CI0 = coefficient of the image.
 
-% output:      I0_new = new image given in terms of intensity after composed with the given transformation field.  
+% Output Variable:
+%  I0_new = new image given in terms of intensity after composed with the given transformation field.
 
 %degree of Bspline level set
 p=3;
 q=3;
 r=3;
 
-Vx=reshape(VXL, [ny nx nz]); 
+Vx=reshape(VXL, [ny nx nz]);
 Vy=reshape(VYL, [ny nx nz]);
 Vz=reshape(VZL, [ny nx nz]);
 
@@ -56,7 +58,7 @@ parfor j=1:ny
             basis_z = [(2-z)^3/6, 2/3-(z-1)^2+(z-1)^3/2, 2/3-(z-2)^2+(2-z)^3/2, (z-1)^3/6];
             
             coef_loc= coef(l1+2:l1+5,k1+2:k1+5,m1+2:m1+5);
-
+            
             I0_temp = 0;
             for u=1:4
                 for v=1:4
@@ -67,9 +69,11 @@ parfor j=1:ny
                 end
             end
             I0_new(j,i,k)=I0_temp;
-                        
-
+            
+            
         end
     end
+end
+
 end
 

@@ -1,4 +1,5 @@
 function coef = img2coef3D(I, nx, ny, nz)
+
 %source code: https://github.com/stellaccl/cdmffd-image-registration
 %paper: Chan, C. L., Anitescu, C., Zhang, Y., & Rabczuk, T. (2017). Two and three dimensional image registration based on B-spline composition and level sets. 
 %Communications in Computational Physics, 21(2), 600-622.
@@ -6,9 +7,12 @@ function coef = img2coef3D(I, nx, ny, nz)
 % img2coef_3D compute coeffient of B-spline level set representation for a
 % given image I 
 
-%input: I = 3 dimensional image
+%--Input Variable: 
+%      I = 3 dimensional image
 %      nx, ny, nz = size of image I in x, y, and z direction
-% output: coef = coefficient of B-spline level set representation. 
+
+%--Output variable:
+%coef = coefficient of B-spline level set representation. 
 
 
 I = reshape(I, ny, nx, nz);

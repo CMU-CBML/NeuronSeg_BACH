@@ -3,7 +3,10 @@ function [ kernel ] = BsplineKernel3D( )
 %paper: Chan, C. L., Anitescu, C., Zhang, Y., & Rabczuk, T. (2017). Two and three dimensional image registration based on B-spline composition and level sets. 
 %Communications in Computational Physics, 21(2), 600-622.
 
-%create 4x4x4 Bspline kernel 
+%This function creates a 4x4x4 Bspline kernel 
+
+%--Output Variable:
+%kernel: 4x4x4 Bspline kernel 
 
 b = [1/24, 11/24, 11/24, 1/24];
 

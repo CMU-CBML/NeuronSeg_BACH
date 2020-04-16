@@ -1,16 +1,19 @@
 function [ Vx_new, Vy_new, Vz_new ] = BsplineCompose3D( nx,ny,nz,VX, VY, VZ, CX, CY, CZ)
+
 %source code: https://github.com/stellaccl/cdmffd-image-registration
-%paper: Chan, C. L., Anitescu, C., Zhang, Y., & Rabczuk, T. (2017). Two and three dimensional image registration based on B-spline composition and level sets. 
+%paper: Chan, C. L., Anitescu, C., Zhang, Y., & Rabczuk, T. (2017). Two and three dimensional image registration based on B-spline composition and level sets.
 %Communications in Computational Physics, 21(2), 600-622.
 
 %compose the transformation field Vx, Vy, Vz with the update field given by in terms of coefficient (CX, CY, and CZ).
 %Note: Vx, Vy Vy should be between 0...nx, 0..ny and 0..nz respectively
 
-%input: nx,ny,nz = size of image in x, y, and z direction respectively
+%--Input Variable:
+%       nx,ny,nz = size of image in x, y, and z direction respectively
 %       VX,VY,VZ = transformation field in x, y, and z direction respectively
 %       CX, CY, CZ = coefficient of transformation field in  x, y, and z direction respectively
 
-%output: Vx_new, Vy_new, Vz_new = composed transformation field in x, y, and z direction respectively
+%--Output Variable:
+%       Vx_new, Vy_new, Vz_new = composed transformation field in x, y, and z direction respectively
 
 %degree of B-spline level set function
 p=3;
@@ -28,12 +31,12 @@ coef_z=reshape(CZ,[nx+q ny+p nz+r]);
 Vx_new = zeros(size(Vx));
 Vy_new = zeros(size(Vy));
 Vz_new = zeros(size(Vz));
-[Vx_ident, Vy_ident, Vz_ident] = meshgrid((0.5:ny-0.5),(0.5:nx-0.5),(0.5:nz-0.5));
+%[Vx_ident, Vy_ident, Vz_ident] = meshgrid((0.5:ny-0.5),(0.5:nx-0.5),(0.5:nz-0.5));
 parfor k=1:nz
     for j=1:ny
         for i=1:nx
             
-         
+            
             x_disp = Vx(i,j,k);
             y_disp = Vy(i,j,k);
             z_disp = Vz(i,j,k);
@@ -62,12 +65,12 @@ parfor k=1:nz
             coef_loc_x = coef_x(k1+2:k1+5,l1+2:l1+5,m1+2:m1+5);
             coef_loc_y = coef_y(k1+2:k1+5,l1+2:l1+5,m1+2:m1+5);
             coef_loc_z = coef_z(k1+2:k1+5,l1+2:l1+5,m1+2:m1+5);
-
+            
             Vx_temp = 0;
             for u=1:4
                 for v=1:4
                     for w=1:4
-                        Vx_temp=Vx_temp+coef_loc_x(u,v,w)*basis_x(u)*basis_y(v)*basis_z(w);                       
+                        Vx_temp=Vx_temp+coef_loc_x(u,v,w)*basis_x(u)*basis_y(v)*basis_z(w);
                     end
                 end
             end
@@ -106,3 +109,4 @@ end
 %Vy_new(:,ny-2:ny,:)=Vy_ident(:,ny-2:ny,:);
 %Vz_new(:,:,1:3)=Vz_ident(:,:,1:3);
 %Vz_new(:,:,nz-2:nz)=Vz_ident(:,:,nz-2:nz);
+end

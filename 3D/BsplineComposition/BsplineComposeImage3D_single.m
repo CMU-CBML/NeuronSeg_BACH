@@ -1,13 +1,21 @@
 function [ I0_new, I0dx_new, I0dy_new, I0dz_new] = BsplineComposeImage3D_single( Vx, Vy, Vz, coef, nx, ny, nz)
+
 %source code: https://github.com/stellaccl/cdmffd-image-registration
-%paper: Chan, C. L., Anitescu, C., Zhang, Y., & Rabczuk, T. (2017). Two and three dimensional image registration based on B-spline composition and level sets. 
+%paper: Chan, C. L., Anitescu, C., Zhang, Y., & Rabczuk, T. (2017). Two and three dimensional image registration based on B-spline composition and level sets.
 %Communications in Computational Physics, 21(2), 600-622.
 
 %BsplineComposeImage2D compose the transformation field Vx, Vy, with the image (intensity) given in terms of a B-Spline level-set by coef
-%input:  Vx, Vy = transformation field
+
+%--Input Variable:
+%        Vx, Vy = transformation field
 %        coef   = coef of Bspline level set of the image
 %        nx, ny = size of the image
-%Output: I0_new = image after composition with transfomation field.
+
+%--Output Variable:
+%I0_new = image after composition with transfomation field.
+%I0dx_new, I0dy_new, I0dz_new = partial derivatives of image with respect
+%to x, y and z directions after composition with transfomation field.
+
 %Note: Vx, Vy should be between 0...nx, and 0..ny respectively
 
 pU=3;
@@ -50,7 +58,7 @@ parfor k=1:nz
             x = x_disp-k1;
             y = y_disp-l1;
             z = z_disp-m1;
-
+            
             basis_x = [(2-x)^3/6, 2/3-(x-1)^2+(x-1)^3/2, 2/3-(x-2)^2+(2-x)^3/2, (x-1)^3/6];
             basis_y = [(2-y)^3/6, 2/3-(y-1)^2+(y-1)^3/2, 2/3-(y-2)^2+(2-y)^3/2, (y-1)^3/6];
             basis_z = [(2-z)^3/6, 2/3-(z-1)^2+(z-1)^3/2, 2/3-(z-2)^2+(2-z)^3/2, (z-1)^3/6];
@@ -58,7 +66,7 @@ parfor k=1:nz
             basis_dx = [-0.5*(2-x)^2, -2*(x-1)+1.5*(x-1)^2, -2*(x-2)-1.5*(2-x)^2, 0.5*(x-1)^2];
             basis_dy = [-0.5*(2-y)^2, -2*(y-1)+1.5*(y-1)^2, -2*(y-2)-1.5*(2-y)^2, 0.5*(y-1)^2];
             basis_dz = [-0.5*(2-z)^2, -2*(z-1)+1.5*(z-1)^2, -2*(z-2)-1.5*(2-z)^2, 0.5*(z-1)^2];
-
+            
             coef_loc= coef(l1+2:l1+5,k1+2:k1+5,m1+2:m1+5);
             
             for aa = 1:pU+1
@@ -73,4 +81,6 @@ parfor k=1:nz
             end
         end
     end
+end
+
 end
