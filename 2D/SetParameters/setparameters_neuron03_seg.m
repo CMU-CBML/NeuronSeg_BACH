@@ -1,5 +1,26 @@
 function parameters = setparameters_neuron03_seg()
 
+%-- In this function, the parameters for the segmentation of neuron cells
+%is set
+
+%--Input Variables
+
+%--Output Variables
+%parameters: struct variable storing the parameters for the neuron
+%segmentation consisting of the following fields
+%rho: threshold parameter for the refinement of B-splines
+%orderGauss: Gaussian quadrature order
+%maxlevel: number of refinement levels
+%lambda1, lambda2, lambda3: regularization parameters
+%maxiteration: number of maximum iterations for each refinement level
+%timestep: time step value for each refinement level
+%nelemx, nelemy: number of elements in each direction at the first
+%refinement level
+%pU, pV: B-spline degree
+%sigma: G_sigma: the key parameter which needs to be tuned properly for local image fitting
+%sigma_phi:%G_sigma_phi: the variance of regularized Gaussian kernel
+%epsilon:width of level set function
+
 % rho for THB-spline refinement 
 rho(1,1) = 0.01;
 rho(2,1) = 0.05;
