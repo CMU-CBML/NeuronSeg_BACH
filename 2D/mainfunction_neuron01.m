@@ -1,10 +1,10 @@
-% Main function for neuron segmentation
+%-- Main function for neuron segmentation
 
 clc
 clear all
 close all
 
-%add paths
+%-- Add paths
 path = pwd;
 addpath(strcat(path,'/BsplineComposition'));
 addpath(strcat(path,'/data'));
@@ -14,7 +14,7 @@ addpath(strcat(path,'/LevelSetFunctions'));
 addpath(strcat(path,'/SetParameters'));
 addpath(strcat(path,'/THBSpline'));
 
-% set parameters
+%-- Set parameters
 parameters = setparameters_neuron01_seg();
 
 %% Read Neuron Cell Image
