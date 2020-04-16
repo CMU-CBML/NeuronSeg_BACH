@@ -1,12 +1,22 @@
 function [PXF] = computenewpoints(M,Pixel,Jm,Pm)
 
-%% This function evaluates new positions of the pixel coordinates
+%% This function evaluates new positions of the pixel coordinates after deformation
+
+%-- Input Variable:
+%M:Input image
+%Pixel: Struct variable storing the active B-splines over each pixel
+%Jm: Struct variable storing supoort B-splines over each active cell
+%Pm: Control points
+
+%--Output Variable:
+%PXF: New positions of pixels after deformation (x,y) 
+
 px = 0;
 pxxf= zeros(size(M,1),size(M,2));
 pyyf= zeros(size(M,1),size(M,2));
 
-for i = 1:size(M,1),
-    for j = 1:size(M,2),
+for i = 1:size(M,1)
+    for j = 1:size(M,2)
         px = px+1;
         ac_ind = Pixel{px,1};
         supp = Pixel{px,2};
@@ -15,7 +25,7 @@ for i = 1:size(M,1),
         fxxf = 0;
         fyyf = 0;
 
-        for k = 1:ss,
+        for k = 1:ss
             
             CEbf = Pm{SB(k,2),1};
             pif = CEbf(SB(k,1),1);

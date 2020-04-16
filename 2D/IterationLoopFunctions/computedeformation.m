@@ -1,6 +1,20 @@
 function [BIGXf,BIGYf] = computedeformation(Jm,PHI,PHIU,PHIV,Pmf)
 
 %% This function evaluates the deformed positions of the integration points 
+
+%--Input Variable:
+%Jm: Struct variable storing supoort B-splines over each active cell
+%PHI: Struct variable storing the basis function at each Gaussian point (B(x))
+%PHIU: Struct variable storing the x-derivative of basis function at each Gaussian point (B_u(x))
+%PHIV: Struct variable storing the y-derivative of basis function at each Gaussian point (B_v(x))
+%Pmf: Control points stored at each refinement level
+
+%--Output Variable:
+%BIGXf: Variable storing deformation and its derivatives (x-coordinate) at
+%each Gaussian point
+%BIGYf: Variable storing deformation and its derivatives (y-coordinate) at
+%each Gaussian point
+
 ac_ct = size(Jm,1);
 xlen = 6;
 

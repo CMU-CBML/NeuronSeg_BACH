@@ -1,7 +1,16 @@
 function  [s, w] = ggquad(ngp)
+
 % This function gives the Gaussian integration points and weights for each order
  %   h = (b1-a1)/2;
  %   m = (a1+b1)/2;
+ 
+ %-- Input variable:
+ % ngp: Order for Gaussian integration
+ 
+ % Output variable:
+ % s: gauss points
+ % w: weights
+ 
 switch(ngp)
     case 1
         s = 0;

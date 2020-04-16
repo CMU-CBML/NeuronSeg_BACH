@@ -1,6 +1,22 @@
 function [RHS] = computeIntegrationFidelity(Bterm_seg, Jm, PHI, Dm, H,Bvect)
 
 %% This function evaluates the first order variation of the energy functional delta_E_LIF
+
+%--Input Variable:
+%Bterm_seg(:,:,1): The segmentation term at each Gaussian point 
+%Bterm_seg(:,:,2) and Bterm_seg(:,:,3): x and y derivatives of phi. 
+%Jm: Struct variable storing supoort B-splines over each active cell
+%PHI:  Variable storing the basis function at each gaussian point in each
+%active cell
+%Dm: THB-spline data structure element
+%H: Variable storing element size of each active cell
+%Bvect: RHS vector to update control points before applying fidelity term
+
+%--Output Variable:
+
+%RHS: RHS vector to update control points after applying fidelity term
+
+
 [~,w1] = ggquad(6);
 xlen =6;
 w2 = w1;

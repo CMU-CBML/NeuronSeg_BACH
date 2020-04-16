@@ -1,5 +1,30 @@
 function [phi,VF] = MultipleResolution2D(F,phi,param)
 
+%-- In this function, the neuron segmentation for multiple refinement
+%levels is carried out.
+
+%--Input Variables
+%F: input image to be segmented
+%phi: level set function describing the initial guess for the segmented image
+%param: struct variable storing the parameters for the neuron
+%segmentation consisting of the following fields
+%rho: threshold parameter for the refinement of B-splines
+%orderGauss: Gaussian quadrature order
+%maxlevel: number of refinement levels
+%lambda1, lambda2, lambda3: regularization parameters
+%maxiteration: number of maximum iterations for each refinement level
+%timestep: time step value for each refinement level
+%nelemx, nelemy: number of elements in each direction at the first
+%refinement level
+%pU, pV: B-spline degree
+%sigma: G_sigma: the key parameter which needs to be tuned properly for local image fitting
+%sigma_phi:%G_sigma_phi: the variance of regularized Gaussian kernel
+%epsilon:width of level set function
+
+%--Output Variables
+%phi: level set function capturing the final segmented image result
+%VF: deformation field of the evolution of the level set function
+
 %initialize phi, F
 phi00 = phi;
 F00 = F;
@@ -20,17 +45,17 @@ for level = param.maxlevel:-1:1
     F = imresize(F,scale);
     npx = size(F,1); %size of scaled image
     npy = size(F,2);
-    vecF = F(:)';
-    coef_F= img2coef2D(npx,npy, vecF);
-    CIF = coef_F(:)';
-    coef_matF = reshape(CIF, npy+param.pU, npx+param.pV); 
-
-    phi = imresize(phi,scale); 
+    %vecF = F(:)';
+    %coef_F= img2coef2D(npx,npy, vecF);
+    %CIF = coef_F(:)';
+    %coef_matF = reshape(CIF, npy+param.pU, npx+param.pV);
+    
+    phi = imresize(phi,scale);
     vecP = phi(:)';
     coef_P= img2coef2D(npx,npy, vecP);
     CIP = coef_P(:)';
     coef_matP = reshape(CIP, npy+param.pU, npx+param.pV);
-
+    
     F_orig = imresize(F00,scale);
     vecForig = F_orig(:)';
     coef_Forig= img2coef2D(npx,npy, vecForig);
@@ -41,7 +66,7 @@ for level = param.maxlevel:-1:1
     vecphiorig = phi_orig(:)';
     coef_phiorig= img2coef2D(npx,npy, vecphiorig);
     CIPorig = coef_phiorig(:)';
-    coef_matPorig = reshape(CIPorig, npy+param.pU, npx+param.pV);
+    %coef_matPorig = reshape(CIPorig, npy+param.pU, npx+param.pV);
     
     if(level==param.maxlevel)
         
@@ -75,17 +100,17 @@ for level = param.maxlevel:-1:1
         Vxlf_inv = Vxlf_inv+Vx_ident;
         Vylf_inv = -Vylf_inv+Vy_ident;
         
-        II0F_ori = F_orig(:)';
+        %II0F_ori = F_orig(:)';
         II0phi_ori = phi_orig(:)';
-
-        coef_IF = img2coef2D(nx,ny, II0F_ori);
+        
+        %coef_IF = img2coef2D(nx,ny, II0F_ori);
         coef_Iphi = img2coef2D(nx,ny, II0phi_ori);
         
         CI0phi = coef_Iphi(:)';
         
         VXLf=Vxlf(:)';
         VYLf=Vylf(:)';
-
+        
         phi = BsplineComposeImage2D(VXLf, VYLf, CI0phi, nx, ny);
         vecP = phi(:)';
         coef_P = img2coef2D(nx,ny, vecP);
@@ -195,7 +220,7 @@ for level = param.maxlevel:-1:1
         Idiff = sqrt((FDX).^2 + (FDY).^2);
         Cell_grad = interp2(Vx_ident,Vy_ident,Idiff,cell_co(:,2),cell_co(:,1));
         meangrad = mean2(Idiff);
-        %displayAdaptiveGrid(ac,Coeff,Em,knotvectorU,knotvectorV,Jm,Pmold,param,nx,ny);
+        displayAdaptiveGrid(ac,Coeff,Em,knotvectorU,knotvectorV,Jm,Pmold,param,nx,ny);
     end
     
     timestep = param.timestep(param.maxlevel-level+1);
@@ -204,10 +229,21 @@ for level = param.maxlevel:-1:1
     
     orderGauss=param.orderGauss;
     term_seg = zeros(ac_ct*orderGauss,orderGauss,3);
-
+    
     K = fspecial('gaussian',2*round(2*param.sigma)+1,param.sigma);
     K_phi = fspecial('gaussian',5,param.sigma_phi);
-
+    
+    ngridX = 150;
+    ngridY = 150;
+    
+    VGx = zeros(ngridY,ngridX);
+    VGy = zeros(ngridY,ngridX);
+    
+    [FgridX, FgridY, ~, ~] = makeGrid(ngridX,ngridY,nx,ny);
+    
+    gridX0 = FgridX;
+    gridY0 = FgridY;
+    
     figure
     [cI0,~,~] = BsplineComposeImage2D_single(BIGY, BIGX, coef_matForig, size(BIGX,1), size(BIGX,2));
     
@@ -240,13 +276,13 @@ for level = param.maxlevel:-1:1
         coef_f2 = img2coef2D(nx,ny, vec_f2);
         CI_f2 = coef_f2(:)';
         coef_mat_f2 = reshape(CI_f2, ny+3, nx+3);
-      
+        
         [~,cDphiX, cDphiY] = BsplineComposeImage2D_single(BIGY, BIGX, coef_matP, size(BIGX,1), size(BIGX,2));
         [dDelta, ~, ~] = BsplineComposeImage2D_single(BIGY, BIGX, coef_matD, size(BIGX,1), size(BIGX,2));
         [dHphi, ~, ~] = BsplineComposeImage2D_single(BIGY, BIGX, coef_matHphi, size(BIGX,1), size(BIGX,2));
         [df1, ~, ~] = BsplineComposeImage2D_single(BIGY, BIGX, coef_mat_f1, size(BIGX,1), size(BIGX,2));
         [df2, ~, ~] = BsplineComposeImage2D_single(BIGY, BIGX, coef_mat_f2, size(BIGX,1), size(BIGX,2));
-                
+        
         term_seg1 = -dDelta.*(cI0 -df1.*dHphi -df2.*(1-dHphi)).*(df1-df2);
         term_seg_x = cDphiX;
         term_seg_y = cDphiY;
@@ -272,8 +308,7 @@ for level = param.maxlevel:-1:1
             C1f(i,2) = Cif(bi,2);
         end
         
-        str = sprintf('timestep = %f, iteration = %d\n',timestep,iteration);
-        disp(str)
+        fprintf('timestep = %f, iteration = %d\n',timestep,iteration);
         
         C1f = C1f - timestep*Bvect; %update set of first control points
         
@@ -379,7 +414,7 @@ for level = param.maxlevel:-1:1
         
         Vyf=-Vyf;
         Vyf_inv = -Vyf_inv;
-
+        
         %Evaluate new phi
         phi = BsplineComposeImage2D(VXf_new(:)',VYf_new(:)', CIPorig, nx, ny);
         phi(isnan(phi)) = 0;
@@ -387,16 +422,39 @@ for level = param.maxlevel:-1:1
         coef_P = img2coef2D(nx,ny, vecP);
         CIP = coef_P(:)';
         coef_matP = reshape(CIP, ny+3, nx+3);
-
         phi = conv2(phi,K_phi,'same');
-
+        
+        for ii=1:ngridX
+            for jj=1:ngridY
+                
+                j = gridY0(jj,ii);
+                i = gridX0(jj,ii);
+                
+                VGx(jj,ii) = Vxf_inv(j,i);
+                VGy(jj,ii) = Vyf_inv(j,i);
+                
+                FgridX(jj,ii) = round(i+VGx(jj,ii));
+                FgridY(jj,ii) = round(j-VGy(jj,ii));
+                
+            end
+        end
+        
+        subplot(1,2,1)
         imagesc(F);
         colormap gray;
         hold on
         contour(phi,[0,0],'g','Linewidth',3.24);
         hold off
         title('Segmented Image');
-        axis([1 nx 1 ny])
+        
+        th1 = subplot(1,2,2);
+        cla(th1);
+        plotGrid(FgridX, FgridY)
+        axis ([1 nx 1 ny])
+        colormap('gray')
+        set(gca,'position',[0 0 1 1],'units','normalized')
+        set(gca,'YDir','reverse');
+        
         drawnow
         
     end
@@ -410,14 +468,23 @@ for level = param.maxlevel:-1:1
     hold off
     set(gca,'position',[0 0 1 1],'units','normalized')
     colormap gray
-
+    drawnow
+    
+    figure
+    plotGrid(FgridX, FgridY)
+    axis ([1 nx 1 ny])
+    colormap('gray')
+    set(gca,'position',[0 0 1 1],'units','normalized')
+    set(gca,'YDir','reverse');
+    drawnow
+    
     %upsample the image to original size
     Vxf = imresize(Vxf/scale,size(F00));
     Vyf = imresize(Vyf/scale,size(F00));
     
     Vxf_inv = imresize(Vxf_inv/scale,size(F00));
     Vyf_inv = imresize(Vyf_inv/scale,size(F00));
-
+    
     F = imresize(F,size(F00));
     phi = imresize(phi,size(phi00));
 end

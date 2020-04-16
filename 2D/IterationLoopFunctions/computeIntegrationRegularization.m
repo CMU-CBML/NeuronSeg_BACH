@@ -1,9 +1,25 @@
 function [RHSff] = computeIntegrationRegularization(parameters,H,BIGXf,BIGYf,Jm,Dm, PHII,RHSf)
 
 %% This function evaluates the first order variation of the enrgy functional corresponding to hyperelastic regularization E_REG
+
+%--Input variable:
+%parameters,
+%H: Variable storing element size of each active cell
+%BIGXf: Variable storing gauss points (x-coordinate) for each active cell
+%BIGYf:  Variable storing gauss points (y-coordinate) for each active cell
+%Jm:  Struct variable storing supoort B-splines over each active cell
+%Dm: THB-spline data structure element
+%PHII: Sturct variable storing the basis function and its derivatives at
+%each Gaussian point (phi, phi_x, phi_y)
+%RHSf: Input RHS vector before regularization for update of control points
+
+%--Output variable:
+%RHSff: Output RHS vector after regularization for update of control points
+
+
 ac_ct = size(Jm,1);
 xlen = 6;
-[s1,w1] = ggquad(xlen);
+[~,w1] = ggquad(xlen);
 w2 = w1;
 BIGMUXf = BIGXf(:,:,2);
 BIGMUYf = BIGXf(:,:,3);
@@ -12,7 +28,7 @@ BIGMVYf = BIGYf(:,:,3);
 
 PHUI = PHII{1,2};
 PHVI = PHII{1,3};
-for i = 1:ac_ct,
+for i = 1:ac_ct
     
     %length term
     term3f = BIGMUXf(1+(i-1)*xlen:i*xlen,1:6);
@@ -25,12 +41,12 @@ for i = 1:ac_ct,
     supp_phiv = PHVI{i,1};
     supp_size = size(SB,1);
 
-    for bg = 1:supp_size,
+    for bg = 1:supp_size
         valm1f = zeros(xlen,xlen);
         valm2f = zeros(xlen,xlen);
 
-        for gg1 = 1:xlen,
-            for gg2 = 1:xlen,
+        for gg1 = 1:xlen
+            for gg2 = 1:xlen
 
                 phi_ui = supp_phiu(bg,gg1,gg2);
                 phi_vi = supp_phiv(bg,gg1,gg2);
