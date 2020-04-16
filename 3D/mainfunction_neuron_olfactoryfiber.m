@@ -73,9 +73,9 @@ isonormals(X,Y,Z,F,p);
 p.FaceColor = 'red';
 p.EdgeColor = 'none';
 daspect([1 1 1])
-view(3); 
+view(3);
 axis tight
-camlight 
+camlight
 lighting gouraud
 hold on
 p1 = patch(isosurface(X,Y,Z,phi,0));
@@ -83,9 +83,9 @@ isonormals(X,Y,Z,phi,p1);
 p1.FaceColor = 'green';
 p1.EdgeColor = 'none';
 daspect([1 1 1])
-view(3); 
+view(3);
 axis tight
-camlight 
+camlight
 lighting gouraud
 hold on
 
