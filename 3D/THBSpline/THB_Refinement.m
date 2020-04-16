@@ -1,9 +1,52 @@
 function [Elem_final,Basis_final,P_final,ActiveNodes] = THB_Refinement(Elem,Basis,Cpt,knotvectorU, knotvectorV,knotvectorW,ActiveBasis,CellGrad,meanGrad,param,multilev,ActiveNodes)
+
 %% This function performs THBSpline refinement
+
+%--Input Variables:
+%Elem: Data struct variable storing the control grid element information
+%Basis: Basis data struct variable storing the B-spline basis function information
+%Cpt: THB-spline control points
+%knotvectorU: knot vector in u direction
+%knotvectorV: knot vector in v direction
+%knotvectorW: knot vector in w direction
+%ActiveBasis: Basis function to be refined
+%CellGrad: Refinement criterion based on image gradient for the active
+%elements
+%meanGrad: mean image gradient value
+
+%param: struct variable storing the parameters for the neuron
+%segmentation consisting of the following fields
+%rho: threshold parameter for the refinement of B-splines
+%orderGauss: Gaussian quadrature order
+%maxlevel: number of refinement levels
+%lambda1, lambda2, lambda3: regularization parameters
+%maxiteration: number of maximum iterations for each refinement level
+%timestep: time step value for each refinement level
+%nelemx, nelemy: number of elements in each direction at the first
+%refinement level
+%pU, pV: B-spline degree
+%sigma: G_sigma: the key parameter which needs to be tuned properly for local image fitting
+%sigma_phi:%G_sigma_phi: the variance of regularized Gaussian kernel
+%epsilon:width of level set function
+
+%multilev: current refinement level
+%ActiveNodes: Nodes of active elements
+
+
+%--Output Variables:
+
+%Elem_final: Final data struct variable storing the control grid element
+%information after refinement
+%Basis_final: Final basis data struct variable storing the B-spline basis function information
+%after refinement
+%P_final: THB-spline control points after refinement
+%ActiveNodes: Nodes of active elements after refinement
+
 
 %convert struct aray to cell array
 % the reason is refinement function is faster when it works on cell arrays
 % than struct data structure
+
 Em = struct2cell(Elem)';
 Dm = struct2cell(Basis)';
 Pm = struct2cell(Cpt)';
@@ -50,7 +93,7 @@ for j =1:bf_ct
 end
 
 
-%convert cell array to struct array 
+%convert cell array to struct array
 fieldElem = {'knot_ind','flag_active','IEN','chdElem','cell_centre','node','parElem','actE','nodes'};
 Elem_final = cell2struct(Em,fieldElem,2);
 fieldBasis = {'basis_ind','flag_active','chdBasis','coeffBasis','suppCell','flag_trunc','flag_ref','flag_bdy','actB'};

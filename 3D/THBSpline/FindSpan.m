@@ -13,6 +13,7 @@ function knotSpanIndex = FindSpan(n,p,u,U)
 %OUTPUT:
 % knotSpanIndex : index of knot span
 %--------------------------------------------------------------
+
 if (u == U(n+2))
     knotSpanIndex= n;
     return

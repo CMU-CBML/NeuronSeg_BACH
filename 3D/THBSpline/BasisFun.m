@@ -13,6 +13,7 @@ function N = BasisFun(i,u,p,U)
 %              values of the basis function N_(i-p) ... N_(i)
 %              at the evaluation point u
 %--------------------------------------------------------------
+
 N=zeros(1,p+1);
 N(1)=1;
 left=zeros(1,p+1);

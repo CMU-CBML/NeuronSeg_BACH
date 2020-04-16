@@ -24,7 +24,7 @@ function [g_phi, g_phiu, g_phiv, g_phiw] = computeGaussPhiMat(u,v,w,param,ders1,
 %#codegen
 
 %%
-% Degree of each B-spline 
+% Degree of each B-spline
 pU = param.pU;
 pV = param.pV;
 pW = param.pW;
@@ -44,7 +44,7 @@ G_phiw = zeros(supp_size,xlen,xlen,xlen,'single');
 % loop over the gauss points
 for gg1 = 1:xlen
     for gg2 = 1:xlen
-        for gg3 = 1:xlen         
+        for gg3 = 1:xlen
             
             %compute Nu, Nv, Nw, Nu', Nv', Nw'
             RRD1 = reshape(ders1(u,gg2,:,:),2,(pU+1));
@@ -84,7 +84,7 @@ for gg1 = 1:xlen
             phi_piu =gg_coeff*phiiu;
             phi_piv = gg_coeff*phiiv;
             phi_piw = gg_coeff*phiiw;
-
+            
             G_phi(:,gg3,gg2,gg1) = phi_pi;
             G_phiu(:,gg3,gg2,gg1) = phi_piu;
             G_phiv(:,gg3,gg2,gg1) = phi_piv;

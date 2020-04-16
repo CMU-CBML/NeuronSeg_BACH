@@ -1,7 +1,8 @@
 function [Ifinal,Efinal, Pfinal,ActiveNodes] = Refine3D_truncation(index,level,Dem,Elem,Pm,knotvectorU,knotvectorV,knotvectorW,pU,pV,pW,ActiveNodes)
 
-%This function performs refinement of a B-spline 
-%INPUT:
+%This function performs refinement of an active B-spline
+
+%-- Input Variable:
 %index: B-psline global index at a particular refinement level
 %level: Refinement level of the B-spline
 %Dem: B-spline array structure
@@ -14,10 +15,11 @@ function [Ifinal,Efinal, Pfinal,ActiveNodes] = Refine3D_truncation(index,level,D
 %pV: degree of splines in u direction
 %pW: degree of splines in u direction
 
-%OUTPUT:
+%--Output Variable:
 %Ifinal: B-spline array structure after refinement
 %Efinal: Element array structure after refinement
 %Pfinal: Control point array structure after refinement
+%ActiveNodes: Nodes of active control elements after refinement
 
 %control points for current and next level refinement
 P1 = Pm{level,1};
@@ -69,37 +71,37 @@ for i=1:size(supp_b,2)%Loop over the support cells of the bspline
             ind = CIcell(1,k);
             Elem{level+1,2}(ind,1) = 1;  %Make the children elements active
             nodes = Elem{level+1,9}(ind,:);
-            if(k==1),
+            if(k==1)
                 ActiveNodes = [ActiveNodes;nodes(1,2);nodes(1,3);nodes(1,4);nodes(1,5);nodes(1,6);nodes(1,7);nodes(1,8)];
                 nodes(1,1) = nodes1(1,1);
                 Elem{level+1,9}(ind,1) = nodes(1,1);
                 
-            elseif(k==2),
+            elseif(k==2)
                 ActiveNodes = [ActiveNodes;nodes(1,3);nodes(1,6);nodes(1,7)];
                 nodes(1,2) = nodes1(1,2);
                 Elem{level+1,9}(ind,2) = nodes(1,2);
                 
-            elseif(k==3),
+            elseif(k==3)
                 ActiveNodes = [ActiveNodes;nodes(1,3);nodes(1,7);nodes(1,8)];
                 nodes(1,4) = nodes1(1,4);
                 Elem{level+1,9}(ind,4) = nodes(1,4);
                 
-            elseif(k==4),
+            elseif(k==4)
                 ActiveNodes = [ActiveNodes;nodes(1,7)];
                 nodes(1,3) = nodes1(1,3);
                 Elem{level+1,9}(ind,3) = nodes(1,3);
                 
-            elseif(k==5),
+            elseif(k==5)
                 ActiveNodes = [ActiveNodes;nodes(1,6);nodes(1,7);nodes(1,8)];
                 nodes(1,5) = nodes1(1,5);
                 Elem{level+1,9}(ind,5) = nodes(1,5);
                 
-            elseif(k==6),
+            elseif(k==6)
                 ActiveNodes = [ActiveNodes;nodes(1,7)];
                 nodes(1,6) = nodes1(1,6);
                 Elem{level+1,9}(ind,6) = nodes(1,6);
                 
-            elseif(k==7),
+            elseif(k==7)
                 ActiveNodes = [ActiveNodes;nodes(1,7)];
                 nodes(1,8) = nodes1(1,8);
                 Elem{level+1,9}(ind,8) = nodes(1,8);

@@ -11,7 +11,7 @@ function [Pixel, Pix2] = storePixelPhi(numPixels, multilev,pixel, knotvectorU, k
 % knotvectorV: knot vectors in v direction
 % knotvectorW: knot vectors in w direction
 % Em: the element array struct variable
-% Coeff: coefficient matrix of non zero spline sover each active element
+% Coeff: coefficient matrix of non zero splines over each active element
 % param: the struct variable of all the parameters
 
 % OUTPUT:

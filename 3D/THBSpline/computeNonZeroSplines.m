@@ -33,7 +33,7 @@ Jm = cell(ac_ct,1);
 for i = 1:ac_ct %loop over the active elements
     
     counter = 0;
-        
+    
     cell_ind = ac(i,1);
     cell_lev = ac(i,2);
     curr_cell = cell_ind;
@@ -45,29 +45,29 @@ for i = 1:ac_ct %loop over the active elements
     local_b = Em(cell_lev,1).IEN(cell_ind,:);
     lb_size = size(local_b,2);
     ct = zeros((pU+1)*(pV+1)*(pW+1));
-        
+    
     %count the dimension of cell_sup
     for j = 1:lb_size %loop over non-zero splines at the same level as the element
         if(Dm(cell_lev).flag_active(local_b(1,j),1)==1) %if the spline is active
-            counter= counter+1;           
+            counter= counter+1;
         end
     end
     
-     if(cell_lev~=1)
+    if(cell_lev~=1)
         for m = (cell_lev-1):-1:1 %loop over level in decreasing order till level 1
-                        
+            
             curr_cell = Em(m+1).parElem(curr_cell,1); %find the parent cell of the active element
             local_supp = Em(m).IEN(curr_cell,:); %non zero splines of the parent element
             
-            ActiveFlagC = Dm(m).flag_active(local_supp,1);                                            
+            ActiveFlagC = Dm(m).flag_active(local_supp,1);
             for j = 1:(pU+1)*(pV+1)*(pW+1)
                 %if the spline is active
                 if(ActiveFlagC(j)==1)
-                    counter=counter+1;                   
+                    counter=counter+1;
                 end
             end
         end
-     end    
+    end
     
     %initialize cell_sup and coef_arr with the correct dimensions
     cell_supp = zeros(counter,1, 'int64');
@@ -83,7 +83,7 @@ for i = 1:ac_ct %loop over the active elements
     for j = 1:lb_size %loop over non-zero splines at the same level as the element
         if(Dm(cell_lev).flag_active(local_b(1,j),1)==1) %if the spline is active
             counter= counter+1;
-            cell_supp(counter,1) = Dm(cell_lev).actB(local_b(1,j),1); %add to support splines            
+            cell_supp(counter,1) = Dm(cell_lev).actB(local_b(1,j),1); %add to support splines
             coef_arr(counter,:) = ct(j,:);
         end
     end
@@ -114,8 +114,8 @@ for i = 1:ac_ct %loop over the active elements
                 if(ActiveFlagC(j)==1)
                     counter=counter+1;
                     %add to support splines
-                    cell_supp(counter,1) = Dm(m).actB(local_supp(1,j)); 
-          
+                    cell_supp(counter,1) = Dm(m).actB(local_supp(1,j));
+                    
                     %add the support splines coefficient matrices
                     coef_arr(counter,:) = ctnew(j,:);
                 end
@@ -138,8 +138,6 @@ for i=1:length(Jm)
     NZ_AElem(i).nzsplines = Jm{i};
     Coeff_AElem(i).mat = Coeff{i};
 end
-
-
 
 %NZ_AElem = cell2struct(Jm,'nzsplines',2);
 %Coeff_AElem = cell2struct(Coeff,'mat',2);

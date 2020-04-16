@@ -2,6 +2,7 @@ function [BB,Chd_Basis,Coeff_Basis,bdyflag] = storeBasisArray(level,param,knot_c
 
 % This function stores the parts of the element struct array for a
 % particular refinement level
+
 %INPUT:
 % level = current refinement level
 % param = parametric struct array
@@ -11,6 +12,7 @@ function [BB,Chd_Basis,Coeff_Basis,bdyflag] = storeBasisArray(level,param,knot_c
 % knot_fu = knotvector of the next refinement level in u direction
 % knot_fv = knotvector of the next refinement level in v direction
 % knot_fw = knotvector of the next refinement level in w direction
+
 %OUTPUT:
 % BB =  indices array for the DOF at the current refinement level
 % Chd_basis = children basis function indices for the splines at the current refinement
@@ -45,7 +47,7 @@ for basis_k =1:nobW(level,1)
             
             BB(bc,:) = [basis_i,basis_j,basis_k];
             
-            if(basis_i==1 || basis_i==nobU(level,1) || basis_j==1 || basis_j==nobV(level,1)|| basis_k==1 || basis_k==nobW(level,1)),
+            if(basis_i==1 || basis_i==nobU(level,1) || basis_j==1 || basis_j==nobV(level,1)|| basis_k==1 || basis_k==nobW(level,1))
                 bdyflag(bc,1) = 1;
             end
             

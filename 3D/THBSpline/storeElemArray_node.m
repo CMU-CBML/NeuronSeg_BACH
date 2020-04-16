@@ -1,13 +1,18 @@
 function [cK, chdE,PC, BBv, Cellc,supcell_basis,cN] = storeElemArray_node(level,param,knot_cu, knot_cv, knot_cw, sizem,maxlevel)
+
 % This function stores the parts of the element struct array for a
 % particular refinement level
-%INPUT:
+
+%--INPUT:
 % level = current refinement level
 % param = parametric struct array
 % knot_cu = knotvector of the current refinement level in u direction
 % knot_cv = knotvector of the current refinement level in v direction
 % knot_cw = knotvector of the current refinement level in w direction
-%OUTPUT:
+% sizem = total number of nodes
+% maxlevel =  maximum refinement level
+
+%--OUTPUT:
 % cK = knot indices array for the elements at the current refinement level
 % chdE = children element indices for the elements at the current refinement
 %level
@@ -15,6 +20,7 @@ function [cK, chdE,PC, BBv, Cellc,supcell_basis,cN] = storeElemArray_node(level,
 % BBv = the non-zero DOF for the elements at current refinement level
 % Cellc = centroids of the elements at the current refinement level
 % suppcell_basis = the elements under the support of each basis function
+% cN = nodes for the elements at the current refinement level
 
 %parameters
 nobU = param.nobU;
@@ -41,10 +47,10 @@ E = 0;
 
 if(level<=maxlevel-1)
     Parcell = zeros(nelemU(level+1,1)*nelemV(level+1,1)*nelemW(level+1,1),1);
-    PC = zeros(nelemU(level+1,1)*nelemV(level+1,1)*nelemW(level+1,1),1);
+    %PC = zeros(nelemU(level+1,1)*nelemV(level+1,1)*nelemW(level+1,1),1);
 else
     Parcell = zeros(nelemU(level,1)*nelemV(level,1)*nelemW(level,1),1);
-    PC = zeros(nelemU(level,1)*nelemV(level,1)*nelemW(level,1),1);
+    %PC = zeros(nelemU(level,1)*nelemV(level,1)*nelemW(level,1),1);
 end
 
 BBvector = zeros(nelemU(level,1)*nelemV(level,1)*nelemW(level,1),(1+pU)*(1+pV)*(1+pW));

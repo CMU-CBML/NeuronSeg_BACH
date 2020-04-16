@@ -1,4 +1,5 @@
 function [AElem, ABasis,ACpts, ARHS,Elem,Basis,ActiveNodes] = storeActiveElem(Elem,Basis,P,multilev,ActiveNodes)
+
 % This function stores the active basis functions, elements and control
 % points after refinement. It also stores the active indices for each
 % element in the array structure which is set active
@@ -7,7 +8,7 @@ function [AElem, ABasis,ACpts, ARHS,Elem,Basis,ActiveNodes] = storeActiveElem(El
 %Elem: element array structure
 %Basis: basis function array structure
 %P: control points array structure
-%multilev: current refinement level -1 
+%multilev: current refinement level -1
 
 %OUPUT:
 %AElem: active element array
@@ -26,7 +27,7 @@ ac = [];
 bf = [];
 
 for level = 1:(multilev+1)
-    %load the active flags for the elements and B-splines at a particular level 
+    %load the active flags for the elements and B-splines at a particular level
     sizee = size(Elem(level).flag_active,1);
     sizeb = size(Basis(level).flag_active,1);
     %load the control points at a particular level
@@ -41,7 +42,7 @@ for level = 1:(multilev+1)
             %update the active cell index for the element in hierarchy
             %array structure
             Elem(level).actE(i,1) = ac_ct;
-            if(level==1),
+            if(level==1)
                 nodes = Elem(level).nodes(i,:);
                 ActiveNodes = [ActiveNodes; nodes'];
             end

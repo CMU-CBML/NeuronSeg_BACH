@@ -1,4 +1,5 @@
 function [PHI,PHIU,PHIV,PHIW,BIGX,BIGY,BIGZ,H] = GaussPhi(ac,Em,knotvectorU,knotvectorV,knotvectorW,Coeff,param,maxlevel)
+
 %#codegen
 % This function computes the basis function (phi) along with the first
 % derivative in each parametric direction (phi_u, phi_v, phi_w) at each
@@ -30,16 +31,10 @@ function [PHI,PHIU,PHIV,PHIW,BIGX,BIGY,BIGZ,H] = GaussPhi(ac,Em,knotvectorU,knot
 % BIGX, BIGY, BIGZ: the coordinates of the physical location of the gauss
 % points in each active element
 % H: the size of each active element divided by 2 (Jacobian of the transformation)
+
 %%
 % order of gaussian quadrature
 orderGauss = param.orderGauss;
-
-% maximum refinement level
-
-%number of elements at all refinement levels
-nelemU = param.nelemU;
-nelemV = param.nelemV;
-nelemW = param.nelemW;
 
 %degree of splines
 pU = param.pU;
@@ -53,9 +48,9 @@ nobW = param.nobW;
 ac_ct = size(ac,1);
 
 %the gauss points of the corresponding gaussian quadrature order
-[si1,mmm] = ggquad(orderGauss);
-[si2,mmm] = ggquad(orderGauss);
-[si3,mmm] = ggquad(orderGauss);
+[si1,~] = ggquad(orderGauss);
+[si2,~] = ggquad(orderGauss);
+[si3,~] = ggquad(orderGauss);
 
 H = zeros(ac_ct,3,'single');
 
@@ -68,7 +63,7 @@ DERU = cell(maxlevel,1);
 DERV = cell(maxlevel,1);
 DERW = cell(maxlevel,1);
 
-for i =1:maxlevel 
+for i =1:maxlevel
     
     
     dersU = zeros(nobU(i),orderGauss,2,pU+1);
