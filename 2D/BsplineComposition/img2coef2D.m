@@ -4,10 +4,15 @@ function coef = img2coef2D(nx, ny, I)
 %paper: Chan, C. L., Anitescu, C., Zhang, Y., & Rabczuk, T. (2017). Two and three dimensional image registration based on B-spline composition and level sets. 
 %Communications in Computational Physics, 21(2), 600-622.
 
-%img2coe2D  Compute coeffident for B-spline level set representation of image I 
-%Input:     nx = number of row of Image I 
-%           ny = number of column of Image I
-%Output:    coef = coefficient of B-spline level set function
+%img2coe2D  Compute coeffident for B-spline level set representation of image I
+
+%--Input Variable:     
+%nx: number of row of Image I 
+%ny: number of column of Image I
+%I: input image
+
+%--Output Variable
+%coef: coefficient of B-spline level set function
 
 %degree of level set function
 p=3;

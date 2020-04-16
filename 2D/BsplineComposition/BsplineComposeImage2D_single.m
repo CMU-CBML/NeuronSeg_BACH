@@ -4,12 +4,20 @@ function [ I0_new, I0dx_new, I0dy_new] = BsplineComposeImage2D_single( Vx, Vy, c
 %paper: Chan, C. L., Anitescu, C., Zhang, Y., & Rabczuk, T. (2017). Two and three dimensional image registration based on B-spline composition and level sets. 
 %Communications in Computational Physics, 21(2), 600-622.
 
-%BsplineComposeImage2D compose the transformation field Vx, Vy, with the image (intensity) given in terms of a B-Spline level-set by coef
-%input:  Vx, Vy = transformation field
-%        coef   = coef of Bspline level set of the image
+%BsplineComposeImage2D compose the transformation field Vx, Vy, with the image 
+%(intensity) given in terms of a B-Spline level-set by coef
+
+%--Input Variable:  
+%        Vx, Vy = transformation field
+%        coef   = coef of Bspline representation of the image
 %        nx, ny = size of the image
-%Output: I0_new = image after composition with transfomation field.
+
+%--Output Variable: 
+
+%I0_new = image after composition with transfomation field.
 %Note: Vx, Vy should be between 0...nx, and 0..ny respectively
+%I0dx_new = the partial derivative of the image with respect to x after composition with transfomation field.
+%I0dy_new = the partial derivative of the image with respect to y after composition with transfomation field.
 
 % p=3;
 % q=3;
@@ -61,5 +69,7 @@ parfor j=1:ny
         I0dx_new(i,j) = basis_y*coef_loc*basis_dx';
         I0dy_new(i,j) = basis_dy*coef_loc*basis_x';
     end
+end
+
 end
 

@@ -6,10 +6,14 @@ function [ I0_new ] = BsplineComposeImage2D( Vx, Vy, coef, nx, ny)
 
 
 %BsplineComposeImage2D compose the transformation field Vx, Vy, with the image (intensity) given in terms of a B-Spline level-set by coef
-%input:  Vx, Vy = transformation field
+
+%--Input Variable:  
+%        Vx, Vy = transformation field
 %        coef   = coef of Bspline level set of the image
 %        nx, ny = size of the image
-%Output: I0_new = image after composition with transfomation field.
+
+%--Output Variable: 
+%I0_new = image after composition with transfomation field.
 %Note: Vx, Vy should be between 0...nx, and 0..ny respectively
 
 p=3;
